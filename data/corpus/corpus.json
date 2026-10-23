@@ -1,0 +1,32 @@
+{
+  "_comment": "Corpus manifest (D2: index records which version of which document it was built from). Add a document here, then run: python -m backend.retrieval.build_index",
+  "documents": [
+    {
+      "doc_id": "rbi_circular_2017",
+      "file": "rbi_customer_protection_2017_pdf.pdf",
+      "title": "RBI Circular DBR.No.Leg.BC.78/09.07.005/2017-18: Customer Protection - Limiting Liability of Customers in Unauthorised Electronic Banking Transactions (6 July 2017)",
+      "short_title": "RBI Circular on Limiting Customer Liability (6 Jul 2017)",
+      "issuer": "Reserve Bank of India",
+      "version": "2017-07-06",
+      "profile": "rbi_circular"
+    },
+    {
+      "doc_id": "sbi_policy_2021",
+      "file": "sbi_customer_protection_policy_v2_4.pdf",
+      "title": "State Bank of India: Customer Rights, Grievance Redressal and Compensation Policy - 2021 (Version-2, issued 25.10.2021)",
+      "short_title": "SBI Customer Rights, Grievance Redressal and Compensation Policy 2021",
+      "issuer": "State Bank of India",
+      "version": "2021-10-25 (Version-2)",
+      "profile": "bank_policy"
+    },
+    {
+      "doc_id": "rbi_ios_2026",
+      "file": "rbi_integrated_ombudsman_scheme_2026.pdf",
+      "title": "Reserve Bank - Integrated Ombudsman Scheme, 2026",
+      "short_title": "RBI Integrated Ombudsman Scheme 2026",
+      "issuer": "Reserve Bank of India",
+      "version": "effective 2026-07-01",
+      "profile": "rbi_scheme"
+    }
+  ]
+}

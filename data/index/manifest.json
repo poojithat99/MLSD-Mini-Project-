@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "built_at": "2026-10-23T08:59:59+00:00",
+  "built_at_unix": 1792745999,
+  "fingerprint": "dd019f12e4eac36080c68b37c787cf8ccb4ddfdb73f1e6aa988f0a036478a9fd",
+  "embedder": {
+    "name": "st:all-MiniLM-L6-v2|q=|d=|L=512",
+    "dim": 384,
+    "backend": "sentence-transformers",
+    "model": "all-MiniLM-L6-v2"
+  },
+  "chunker": {
+    "max_words": 140,
+    "lead_max_words": 70,
+    "table_min_words": 10,
+    "table_slack": 1.6,
+    "pack_target": 0.6,
+    "min_clause_words": 12,
+    "header_mode": "light"
+  },
+  "documents": [
+    {
+      "doc_id": "rbi_circular_2017",
+      "file": "rbi_customer_protection_2017_pdf.pdf",
+      "sha256": "630f68e6f25a8cdcfe942c1e20b73b0c807b1690b0536b84b1e8b61b23f64b0e",
+      "version": "2017-07-06",
+      "title": "RBI Circular DBR.No.Leg.BC.78/09.07.005/2017-18: Customer Protection - Limiting Liability of Customers in Unauthorised Electronic Banking Transactions (6 July 2017)",
+      "pages_extracted": 9,
+      "chunks": 21
+    },
+    {
+      "doc_id": "sbi_policy_2021",
+      "file": "sbi_customer_protection_policy_v2_4.pdf",
+      "sha256": "a24911977b45a7fb6097d485fd30b49ecaa53211f457cb1c8f74d9bd841a2792",
+      "version": "2021-10-25 (Version-2)",
+      "title": "State Bank of India: Customer Rights, Grievance Redressal and Compensation Policy - 2021 (Version-2, issued 25.10.2021)",
+      "pages_extracted": 47,
+      "chunks": 154
+    },
+    {
+      "doc_id": "rbi_ios_2026",
+      "file": "rbi_integrated_ombudsman_scheme_2026.pdf",
+      "sha256": "f119574982a073819d2286c3d016ef10e1fbeebed8e23864e40e885d950901b6",
+      "version": "effective 2026-07-01",
+      "title": "Reserve Bank - Integrated Ombudsman Scheme, 2026",
+      "pages_extracted": 24,
+      "chunks": 77
+    }
+  ],
+  "n_chunks": 252,
+  "integrity": {
+    "chunks_sha256": "eb8b1102543323c81309c028d13c8c392c55f5b314de93670f68f6abcc14f08d"
+  },
+  "stats": {
+    "ingest_seconds": 11.365,
+    "chunk_seconds": 0.119,
+    "embed_seconds": 14.589,
+    "total_seconds": 116.326,
+    "chunks_embedded": 252,
+    "chunks_reused": 0,
+    "embed_chunks_per_second": 17.27,
+    "pipeline_chunks_per_second": 2.17
+  },
+  "unresolved_xrefs": [],
+  "warnings": [
+    "sbi_policy_2021 p10: ignored marker-like line 'xix) Assist the customer in all available ways for'",
+    "sbi_policy_2021 p10: ignored marker-like line 'xx) Ensure that all marketing and promotional mate'",
+    "sbi_policy_2021 p10: ignored marker-like line 'xxi) Not threaten the customer with physical harm,'",
+    "sbi_policy_2021 p10: ignored marker-like line 'xxii) Ensure that the fees and charges on products'",
+    "sbi_policy_2021 p41: ignored marker-like line '(iii) Remittance of proceeds to the lodger’s bank '",
+    "rbi_ios_2026 p19: ignored marker-like line '(ii) The Scheme allows a compensation for conseque'",
+    "rbi_ios_2026 p19: ignored marker-like line '(iii) The scheme allows a compensation for harassm'"
+  ],
+  "extraction_notes": []
+}
