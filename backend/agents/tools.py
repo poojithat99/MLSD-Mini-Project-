@@ -84,6 +84,7 @@ class RetrieverPort(Protocol):
 
     def search(self, query: str, k: int | None = None, *, expand_refs: bool = False) -> list: ...
     def get_clause(self, doc_id: str, clause_id: str, part: str | None = None) -> list: ...
+    def get_chunk(self, chunk_id: str) -> Any: ...
 
 
 def to_record(p: Any, retriever: Any) -> RetrievedPassage:
@@ -156,6 +157,7 @@ TOOL_SPECS: list[dict] = [
         "parameters": {"type": "object", "properties": {}}}},
 ]
 TOOL_NAMES = {t["function"]["name"] for t in TOOL_SPECS}
+CODE_ONLY_TOOLS = {"fetch_chunk"}     # used by the agent's own retry code, never offered to the model
 
 
 # --------------------------------------------------------------------------- #
@@ -186,6 +188,11 @@ class Toolbox:
     def get_clause(self, doc_id: str, clause_id: str) -> list[RetrievedPassage]:
         return self._remember(self.retriever.get_clause(doc_id, clause_id))
 
+    def fetch_chunk(self, chunk_id: str) -> list[RetrievedPassage]:
+        """Re-read a passage by chunk id (follows a cross-reference)."""
+        p = self.retriever.get_chunk(chunk_id)
+        return self._remember([p] if p else [])
+
     def get_request_fields(self) -> dict:
         if self.safe_fields is not None:
             return self.safe_fields
@@ -203,7 +210,7 @@ class Toolbox:
         detail: dict[str, Any] = {"arguments": arguments}
         with span("tool." + name, tool=name):
             try:
-                if name not in TOOL_NAMES:
+                if name not in TOOL_NAMES | CODE_ONLY_TOOLS:
                     raise ValueError(f"unknown tool {name!r}")
                 fn = getattr(self, name)
                 timeout = min(self.timeout_s, max(0.1, self.budget.remaining_s()))

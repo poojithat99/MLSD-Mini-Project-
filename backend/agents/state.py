@@ -126,9 +126,10 @@ class DeadlineExceeded(BudgetExhausted):
     """Wall-clock limit reached."""
 
 
-# Defaults sized for the declared SLO (plan section 9: <= ~6 model calls, 60 s hard cap per run).
-MAX_STEPS = 10          # model calls per run, both agents, all retries
-MAX_TOOL_CALLS = 12     # tool calls per run
+# Defaults sized for the declared SLO (plan section 9: 60 s hard cap per run).  A normal run makes
+# ~5 model calls (analyst 4 incl. the modifier check, verifier 1); 14 leaves room for both retries.
+MAX_STEPS = 14          # model calls per run, both agents, all retries
+MAX_TOOL_CALLS = 16     # tool calls per run
 WALL_CLOCK_S = 60.0     # hard cap per run
 TOOL_TIMEOUT_S = 10.0   # per tool call
 

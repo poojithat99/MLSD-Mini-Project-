@@ -132,13 +132,16 @@ def analysis_node(state: GraphState) -> dict:
         strategy = hint if hint in STRATEGIES and hint not in used else next(s for s in STRATEGIES if s not in used)
         used.append(strategy)
     draft = analysis_agent.run_analysis(run, state["request"], strategy=strategy,
-                                        verdict=state.get("verdict"))
+                                        verdict=state.get("verdict"), previous=state.get("draft"))
     return {"draft": draft, "attempts": state.get("attempts", 0) + 1, "strategies_used": used}
 
 
 @traced_node("verifier")
 def verifier_node(state: GraphState) -> dict:
-    return {"verdict": verification_agent.verify(state["run"], state["draft"])}
+    run: RunContext = state["run"]
+    verdict = verification_agent.verify(run, state["draft"])
+    run.trace.append(TraceEntry(type="node", name="verifier.verdict", detail=verdict.model_dump(mode="json")))
+    return {"verdict": verdict}
 
 
 @traced_node("finalize")
