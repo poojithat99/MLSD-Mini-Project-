@@ -4,3 +4,4 @@ openai>=1.40
 pydantic>=2.6
 opentelemetry-api>=1.25
 pytest>=8.0
+pymupdf>=1.24       # only to import backend.retrieval (Passage, normalize_for_match) in agent tests
