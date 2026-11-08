@@ -8,8 +8,11 @@ INPUT (before any model sees the request), on every string field:
   3. Free text is wrapped in delimiters; the system prompt tells the model that
      text inside them is data, never instructions.
   4. Toxicity check (stub interface for now).
-The run continues on the neutralised text: an injection attempt does not get
-to choose the outcome, and the output filter below still applies.
+An injection found in a FREE-TEXT field (narrative, merchant) makes the graph
+escalate immediately with reason "injection_detected", before any model call.
+The note names the field, never the injected text.  A hit in a structured
+field is only neutralised and flagged (those fields are validated against
+fixed categories at the API boundary).
 
 OUTPUT (before a result leaves the graph):
   * only the four allowed outcomes: chargeback, provisional_credit, decline, escalate;
@@ -110,6 +113,12 @@ def guard_request(request: DisputeInput) -> tuple[dict, list[str]]:
             flags.append(f"toxicity:{name}")
         fields[name] = wrap_untrusted(name, value) if name in FREE_TEXT_FIELDS else value
     return fields, flags
+
+
+def injected_free_text_fields(flags: list[str]) -> list[str]:
+    """Free-text fields with an injection flag ("injection:<field>:<pattern>")."""
+    fields = {f.split(":")[1] for f in flags if f.startswith("injection:")}
+    return sorted(fields & set(FREE_TEXT_FIELDS))
 
 
 # --------------------------------------------------------------------------- #

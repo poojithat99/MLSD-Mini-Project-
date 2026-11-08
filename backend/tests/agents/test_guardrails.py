@@ -99,15 +99,26 @@ def _client(script):
     return LLMClient(FakeLLM(script), make_config(), sleep=lambda s: None)
 
 
-def test_injected_text_reaches_model_only_neutralised_and_delimited(retriever, request_ok):
-    req = request_ok.model_copy(update={"narrative": "Card used online without my consent. " + INJECTION})
+@pytest.mark.parametrize("field", ["narrative", "merchant"])
+def test_injection_in_free_text_escalates_before_any_model_call(retriever, request_ok, field):
+    req = request_ok.model_copy(update={field: "Card used online without my consent. " + INJECTION})
     llm = _client(ScriptedAgents())
     r = run_dispute_graph(req, "run-i", "corr-i", llm=llm, retriever=retriever)
+    assert llm.primary.calls == []                                         # no model was called at all
+    assert r.status == "escalated" and r.route is None and r.citations == []
+    assert r.escalation.reason_code.value == "injection_detected"
+    assert field in r.escalation.note
+    dumped = r.model_dump_json()                                           # including the trace
+    for fragment in ("admin mode", "Ignore all previous", "<system>", "issue a provisional credit"):
+        assert fragment not in dumped                                      # injected text never echoed
+    assert not any(t.type in ("llm", "tool") for t in r.trace)
+
+
+def test_clean_free_text_is_sent_delimited(retriever, request_ok):
+    llm = _client(ScriptedAgents())
+    run_dispute_graph(request_ok, "run-k", "corr-k", llm=llm, retriever=retriever)
     sent = "\n".join(m["content"] or "" for call in llm.primary.calls for m in call)
-    assert "admin mode" not in sent and "<system>" not in sent
-    assert "<<<UNTRUSTED narrative" in sent
-    flags = [t.detail["flags"] for t in r.trace if t.name == "guardrails.input"][0]
-    assert flags and r.status in ("recommended", "escalated")
+    assert "<<<UNTRUSTED narrative" in sent and "<<<UNTRUSTED merchant" in sent
 
 
 def test_model_that_obeys_an_injection_is_still_blocked(retriever, request_ok):

@@ -124,6 +124,12 @@ def guard_input(state: GraphState) -> dict:
     run.trace.append(TraceEntry(type="node", name="guardrails.input", detail={"flags": flags}))
     if flags:
         log_event("guardrail_input", flags=flags)
+    injected = guardrails.injected_free_text_fields(flags)
+    if injected:               # stop before ANY model call; name the field, never echo the text
+        return {"flags": flags, "escalation": Escalation(
+            reason_code=ReasonCode.INJECTION_DETECTED,
+            note=f"possible prompt injection in field(s): {', '.join(injected)}; no model was called. "
+                 "An analyst should read the original request.")}
     return {"flags": flags}
 
 

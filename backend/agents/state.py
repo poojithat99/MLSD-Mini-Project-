@@ -39,6 +39,7 @@ class ReasonCode(str, Enum):
     BUDGET_EXHAUSTED = "budget_exhausted"              # step or tool-call limit hit
     TIMEOUT = "timeout"                                # wall-clock deadline hit
     PROVIDER_UNAVAILABLE = "provider_unavailable"      # model provider down / breaker open
+    INJECTION_DETECTED = "injection_detected"          # prompt injection in a free-text field; no model was called
 
 
 # --------------------------------------------------------------------------- #

@@ -71,13 +71,15 @@ Agent module map: `llm.py` (only model interface) · `state.py` (types, Budget, 
   defined fallback. Token counts, cost and latency recorded per call, attributed to a step name.
 - Agent loops bounded by steps, tool calls and wall-clock (`Budget`).
 - **Any run that does not complete cleanly returns an escalation with a reason code, never a confident answer.**
-  Reason codes: `contested_fault, conflicting_provisions, out_of_corpus, verification_failed,
-  budget_exhausted, timeout, provider_unavailable`.
+  Reason codes (8): `contested_fault, conflicting_provisions, out_of_corpus, verification_failed,
+  budget_exhausted, timeout, provider_unavailable, injection_detected`.
 - Verifier sees only claims + retrieved passages, never the analyst's reasoning. Deterministic citation check
   first; if the verifier's LLM is down, run only that check and force escalation.
 - The system never issues a credit or closes a dispute. Routes allowed: chargeback, provisional_credit,
   decline, escalate.
 - Untrusted free text is injection-scanned and wrapped in delimiters before it reaches a model.
+  An injection in a free-text field (`narrative`, `merchant`) escalates immediately with `injection_detected`,
+  before any model call; the note names the field and never echoes the injected text.
 - Working days are computed in code, not by the model.
 - Prompts are versioned files in `backend/prompts/`; the version is recorded in every `DisputeResult`.
 - Tests use `FakeLLM` and a fake retriever only — no real API calls.

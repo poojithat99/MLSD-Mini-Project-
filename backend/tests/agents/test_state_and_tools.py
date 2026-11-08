@@ -30,7 +30,7 @@ def test_escalation_requires_reason_and_no_route():
                       escalation=Escalation(reason_code=ReasonCode.TIMEOUT))
     with pytest.raises(ValueError):
         DisputeResult(run_id="r", status="escalated")
-    assert len(ReasonCode) == 7
+    assert len(ReasonCode) == 8 and ReasonCode("injection_detected")
 
 
 # ------------------------------------------------------------------ Budget
