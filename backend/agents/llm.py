@@ -356,6 +356,22 @@ class LLMClient:
         raise ProviderUnavailable(f"{provider.name}: {last or 'not attempted'}")
 
 
+def parse_json_object(text: str | None) -> dict:
+    """The JSON object in a model reply, tolerating ```json fences and text around it."""
+    if not text:
+        raise LLMError("model returned no content where JSON was expected")
+    start, end = text.find("{"), text.rfind("}")
+    if start < 0 or end < start:
+        raise LLMError(f"model reply contains no JSON object: {text[:120]!r}")
+    try:
+        obj = json.loads(text[start:end + 1])
+    except json.JSONDecodeError as exc:
+        raise LLMError(f"model reply is not valid JSON: {exc}") from exc
+    if not isinstance(obj, dict):
+        raise LLMError("model reply JSON is not an object")
+    return obj
+
+
 # --------------------------------------------------------------------------- #
 # process-wide client
 # --------------------------------------------------------------------------- #
