@@ -24,7 +24,7 @@ from typing import Any, Callable
 
 from langgraph.graph import END, START, StateGraph
 
-from . import analysis_agent, verification_agent
+from . import analysis_agent, guardrails, verification_agent
 from .llm import LLMClient, LLMError, LLMResponse, ProviderUnavailable, UsageLedger, get_llm
 from .observability import log_event, run_context, span
 from .prompts import load_prompt
@@ -118,8 +118,13 @@ def traced_node(name: str) -> Callable:
 @traced_node("guard_input")
 def guard_input(state: GraphState) -> dict:
     run: RunContext = state["run"]
+    safe_fields, flags = guardrails.guard_request(state["request"])
+    run.toolbox.safe_fields = safe_fields                           # models only ever see these
     run.delay = compute_reporting_delay(state["request"])          # code, not the model
-    return {"flags": []}
+    run.trace.append(TraceEntry(type="node", name="guardrails.input", detail={"flags": flags}))
+    if flags:
+        log_event("guardrail_input", flags=flags)
+    return {"flags": flags}
 
 
 @traced_node("analysis_agent")
@@ -161,6 +166,13 @@ def finalize_node(state: GraphState) -> dict:
             competing_provisions=d.competing_provisions, note=d.note), **common)
     else:
         result = DisputeResult(status="recommended", route=d.route, **common)
+    blocked = guardrails.output_violations(result)
+    run.trace.append(TraceEntry(type="node", name="guardrails.output", detail={"blocked": blocked}))
+    if blocked:                # never return it as it is: escalate instead
+        log_event("guardrail_output_blocked", problems=blocked)
+        kinds = sorted({p.split(":")[0] for p in blocked})          # the blocked text itself stays in the trace only
+        return {"escalation": Escalation(reason_code=ReasonCode.VERIFICATION_FAILED,
+                                         note="output filter blocked the answer (" + ", ".join(kinds) + ")")}
     return {"result": result}
 
 
@@ -181,6 +193,7 @@ def escalate_node(state: GraphState) -> dict:
     cites = [c for c in (draft.citations if draft else []) if verification_agent.citation_resolves(c, run.evidence)]
     if draft and not esc.competing_provisions:
         esc.competing_provisions = draft.competing_provisions
+    esc.note = guardrails.scrub(esc.note)                           # model-written text: filter it too
     try:
         version = run.prompt_version()
     except (OSError, ValueError):
@@ -189,7 +202,7 @@ def escalate_node(state: GraphState) -> dict:
         run_id=run.run_id, status="escalated", route=None, escalation=esc,
         classification=draft.classification if draft else None,
         reporting_delay_working_days=run.delay["working_days"] if run.delay else None,
-        basis=draft.basis if draft else "", liability_position="", citations=cites,
+        basis=guardrails.scrub(draft.basis) if draft else "", liability_position="", citations=cites,
         verification=Verification(passed=False, attempts=state.get("attempts", 0),
                                   unsupported_claims=verdict.unsupported_claims if verdict else []),
         prompt_version=version,

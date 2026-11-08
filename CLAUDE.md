@@ -47,6 +47,22 @@ Key provisions for the section 4.1 case:
   working days counted per home-branch schedule, excluding the date of receiving the communication.
 - SBI `4.6.2(b)(i)` (same negligence rule) and SBI `Table 2` (beyond 7 working days → full liability).
 
+## How to run (agents)
+
+```bash
+python3 -m venv .venv && .venv/bin/pip install -r backend/requirements.txt
+.venv/bin/python -m pytest backend/tests/agents -q        # use "python -m pytest": backend/ has no __init__.py
+LLM_PROVIDER=fake .venv/bin/python -m backend.agents.demo --case 41          # 4.1 -> escalation citing both
+LLM_PROVIDER=fake LLM_FAKE_SCENARIO=fabricate_citation .venv/bin/python -m backend.agents.demo --case ok
+LLM_BASE_URL=http://127.0.0.1:9 LLM_MODEL=x LLM_API_KEY=x LLM_BREAKER_THRESHOLD=3 \
+  .venv/bin/python -m backend.agents.demo --case ok --repeat 3 --logs       # breaker opens
+```
+
+Agent module map: `llm.py` (only model interface) · `state.py` (types, Budget, reason codes) · `tools.py` ·
+`analysis_agent.py` · `verification_agent.py` · `guardrails.py` · `graph.py` (entry: `run_dispute_graph`) ·
+`prompts.py` + `backend/prompts/*.txt` · `observability.py` · test/demo only: `fake_retriever.py`,
+`fake_scenarios.py`, `demo.py`.
+
 ## Rules I follow
 
 - Every model call goes through `backend/agents/llm.py`. Base URL, model and key come only from env
