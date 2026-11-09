@@ -1,14 +1,16 @@
 """Verification agent (requirements A2, A3; brief section 5 step 4).
 
-A separate agent with its own prompt.  It sees only the CLAIMS, the CITED
-PASSAGES and facts computed by code, never the analysis agent's messages, tool
-calls or reasoning, so it cannot be talked into agreeing.
+A separate agent with its own prompt.  It sees only the CLAIMS and CASE FACTS,
+the CITED PASSAGES, the request's own fields (as delimited untrusted data) and
+facts computed by code, never the analysis agent's messages, tool calls or
+reasoning, so it cannot be talked into agreeing.
 
 (a) Deterministic citation check (no model): every citation must point at a
     passage actually retrieved in this run (same doc_id, clause_id inside that
     passage) and its quote must be a normalised substring of that passage's text
     (Member 1's ``normalize_for_match``).
-(b) Model check: is each claim supported by the cited passages?
+(b) Model check: are the regulatory claims supported by the cited passages, and are the
+    case facts consistent with the request?
 
 Returns a Verdict: pass | retry (with a strategy hint) | escalate.
 If the verifier's model is unavailable, only (a) runs and the run is forced to
@@ -52,7 +54,7 @@ def deterministic_check(draft: AnalysisDraft, evidence: dict[str, RetrievedPassa
     problems = []
     for c in draft.citations:
         if not citation_resolves(c, evidence):
-            problems.append(f"citation {c.doc_id} {c.clause_id} does not resolve to retrieved text: {c.quote[:80]!r}")
+            problems.append(f"citation {c.doc_id} {c.clause_id} does not resolve to retrieved text: {c.quote[:300]!r}")
     if draft.escalate:
         if draft.reason_code in (ReasonCode.CONFLICTING_PROVISIONS, ReasonCode.CONTESTED_FAULT):
             cited = {(c.doc_id, _clause_key(c.clause_id)) for c in draft.citations}
@@ -85,11 +87,21 @@ def _claims(draft: AnalysisDraft) -> list[str]:
 
 
 def llm_check(run, draft: AnalysisDraft) -> Verdict:
-    """(b) Does each claim follow from the cited passages?  The verifier never sees
-    the analyst's messages, tool calls or reasoning: only claims + passages + facts."""
+    """(b) Model check, in two parts.  The verifier never sees the analyst's messages,
+    tool calls or reasoning.
+
+      case_facts  statements about THIS dispute -> checked against the request's own
+                  fields (passed as delimited, untrusted data).  "consistent" or
+                  "not_stated" is fine; "contradicts" (or a regulatory statement filed
+                  as a fact: "not_a_case_fact") is a failure.
+      claims      regulatory statements -> must be supported by the cited passages.
+
+    A statement the model did not give a verdict on counts as unverified (failure)."""
     system, _ = load_prompt(run.verification_prompt)
-    claims = _claims(draft)
+    claims, facts = _claims(draft), list(draft.case_facts)
     payload = {
+        "case_facts": [{"index": i, "fact": f} for i, f in enumerate(facts)],
+        "request": run.toolbox.get_request_fields(),        # free text already wrapped as untrusted data
         "claims": [{"index": i, "claim": c} for i, c in enumerate(claims)],
         "outcome": "escalate: " + (draft.reason_code.value if draft.reason_code else "") if draft.escalate
                    else f"route: {draft.route}",
@@ -101,11 +113,21 @@ def llm_check(run, draft: AnalysisDraft) -> Verdict:
         {"role": "user", "content": json.dumps(payload, ensure_ascii=False)},
     ])
     out = parse_json_object(resp.content)
-    unsupported = [claims[r["index"]] for r in out.get("claims", [])
-                   if not r.get("supported") and isinstance(r.get("index"), int) and r["index"] < len(claims)]
+
+    claim_ok = {r.get("index"): bool(r.get("supported")) for r in out.get("claims") or []}
+    fact_status = {r.get("index"): r.get("status") for r in out.get("case_facts") or []}
+    problems = [f"unsupported by the cited passages: {c}" for i, c in enumerate(claims) if not claim_ok.get(i)]
+    for i, f in enumerate(facts):
+        status = fact_status.get(i)
+        if status == "contradicts":
+            problems.append(f"case fact contradicts the request: {f}")
+        elif status == "not_a_case_fact":
+            problems.append(f"regulatory statement filed as a case fact (not checked against passages): {f}")
+        elif status not in ("consistent", "not_stated"):
+            problems.append(f"case fact not verified: {f}")
+    if problems:
+        return Verdict(decision="retry", strategy_hint="rewrite_query", unsupported_claims=problems)
     missed = out.get("missed_provision")
-    if unsupported:
-        return Verdict(decision="retry", strategy_hint="rewrite_query", unsupported_claims=unsupported)
     if missed and not draft.escalate:
         return Verdict(decision="retry", strategy_hint="wider_k",
                        unsupported_claims=[f"answer ignores a modifying provision: {missed}"])

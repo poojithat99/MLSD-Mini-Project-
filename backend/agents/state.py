@@ -203,6 +203,7 @@ class RetrievedPassage(BaseModel):
     citation: str                # human-readable, e.g. "RBI Circular ..., para 7(i), p. 3"
     text: str
     lead_in: str = ""
+    supporting_text: str = ""    # for an exact clause lookup: that clause's own text (verbatim substring of text)
     score: float = 0.0
     via: str = ""                # why it was retrieved, if not a direct hit
     refs: list[str] = Field(default_factory=list)
@@ -215,12 +216,23 @@ class AnalysisDraft(BaseModel):
     route: Route | None = None
     basis: str = ""
     liability_position: str = ""
-    claims: list[str] = Field(default_factory=list)       # each factual statement the answer rests on
+    in_scope: bool = True                                  # False: not an unauthorised electronic transaction
+    credentials_shared: bool | None = None                 # did the customer share payment credentials? (None: unclear)
+    case_facts: list[str] = Field(default_factory=list)   # statements about THIS dispute (checked against the request)
+    claims: list[str] = Field(default_factory=list)       # regulatory statements (checked against the passages)
     citations: list[Citation] = Field(default_factory=list)
     escalate: bool = False
     reason_code: ReasonCode | None = None
     competing_provisions: list[str] = Field(default_factory=list)
     note: str = ""
+
+    @model_validator(mode="before")
+    @classmethod
+    def _null_means_default(cls, data: Any) -> Any:
+        """Models send null for "nothing" (Gemini sent "note": null): use the field's default."""
+        if isinstance(data, dict):
+            return {k: v for k, v in data.items() if v is not None}
+        return data
 
 
 class Verdict(BaseModel):

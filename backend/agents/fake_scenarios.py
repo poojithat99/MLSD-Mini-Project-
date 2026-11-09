@@ -99,6 +99,10 @@ class ScriptedAgents:
 
     @staticmethod
     def _kind(case: str, delay: int) -> str:
+        """Decide from the CUSTOMER's narrative only (the case message also quotes corpus text)."""
+        # the fields arrive JSON-encoded, so the delimiter newlines may be a literal backslash-n
+        m = re.search(r"<<<UNTRUSTED narrative[^>]*>>>(?:\\n|\n)(.*?)(?:\\n|\n)<<<END UNTRUSTED>>>", case, re.DOTALL)
+        case = m.group(1) if m else case
         low = case.lower()
         if any(k in low for k in OUT_OF_CORPUS):
             return "out_of_corpus"

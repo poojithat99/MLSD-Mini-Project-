@@ -55,6 +55,7 @@ class RunContext:
     trace: list[TraceEntry] = field(default_factory=list)
     evidence: dict[str, RetrievedPassage] = field(default_factory=dict)
     delay: dict | None = None
+    table_row: Any = None                 # Citation of the liability-table row for the delay (analysis_agent)
     toolbox: Toolbox | None = None
 
     def __post_init__(self) -> None:
@@ -195,11 +196,17 @@ def escalate_node(state: GraphState) -> dict:
             esc = Escalation(reason_code=verdict.reason_code or ReasonCode.VERIFICATION_FAILED, note=verdict.note)
     esc = esc or Escalation(reason_code=ReasonCode.VERIFICATION_FAILED, note="run did not complete")
     draft = state.get("draft")
-    # keep only citations that resolve to retrieved text: an analyst can use them, nothing unverified leaks out
-    cites = [c for c in (draft.citations if draft else []) if verification_agent.citation_resolves(c, run.evidence)]
-    if draft and not esc.competing_provisions:
-        esc.competing_provisions = draft.competing_provisions
-    esc.note = guardrails.scrub(esc.note)                           # model-written text: filter it too
+    # An escalation reached here was NOT verified, so nothing the model wrote is presented as a
+    # finding: basis, liability_position, citations and competing_provisions stay empty.  The draft
+    # is kept in the trace, labelled unverified, so the analyst can still read it.
+    if draft is not None:
+        run.trace.append(TraceEntry(type="node", name="escalate.unverified_draft", detail={
+            "warning": "NOT VERIFIED - model draft, for the analyst's reference only",
+            "classification": draft.classification, "route": draft.route,
+            "basis": guardrails.scrub(draft.basis), "case_facts": draft.case_facts, "claims": draft.claims,
+            "citations": [c.model_dump() for c in draft.citations],
+            "competing_provisions": draft.competing_provisions}))
+    esc.note = guardrails.scrub(esc.note)                           # may contain model-written text
     try:
         version = run.prompt_version()
     except (OSError, ValueError):
@@ -208,7 +215,7 @@ def escalate_node(state: GraphState) -> dict:
         run_id=run.run_id, status="escalated", route=None, escalation=esc,
         classification=draft.classification if draft else None,
         reporting_delay_working_days=run.delay["working_days"] if run.delay else None,
-        basis=guardrails.scrub(draft.basis) if draft else "", liability_position="", citations=cites,
+        basis="", liability_position="", citations=[],
         verification=Verification(passed=False, attempts=state.get("attempts", 0),
                                   unsupported_claims=verdict.unsupported_claims if verdict else []),
         prompt_version=version,

@@ -97,7 +97,8 @@ def to_record(p: Any, retriever: Any) -> RetrievedPassage:
         clause_ids.append(f"Table {table_no}")
     return RetrievedPassage(
         chunk_id=p.chunk_id, doc_id=p.doc_id, clause_ids=clause_ids, label=p.clause, citation=p.citation,
-        text=p.text, lead_in=p.lead_in or "", score=float(p.score), via=p.via or "",
+        text=p.text, lead_in=p.lead_in or "", supporting_text=p.supporting_text or "",
+        score=float(p.score), via=p.via or "",
         refs=list(p.refs or []), referenced_by=list(p.referenced_by or []),
     )
 

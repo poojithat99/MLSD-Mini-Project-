@@ -73,8 +73,17 @@ Agent module map: `llm.py` (only model interface) · `state.py` (types, Budget, 
 - **Any run that does not complete cleanly returns an escalation with a reason code, never a confident answer.**
   Reason codes (8): `contested_fault, conflicting_provisions, out_of_corpus, verification_failed,
   budget_exhausted, timeout, provider_unavailable, injection_detected`.
-- Verifier sees only claims + retrieved passages, never the analyst's reasoning. Deterministic citation check
-  first; if the verifier's LLM is down, run only that check and force escalation.
+- Verifier never sees the analyst's reasoning. It gets: regulatory `claims` + cited passages (must be supported),
+  `case_facts` + the request's own fields as delimited untrusted data (a contradiction is a failure; a regulatory
+  statement filed as a case fact is a failure). Deterministic citation check first and unchanged; if the
+  verifier's LLM is down, run only that check and force escalation.
+- Code (not the model) fetches the RBI Table 2 row for the delay and RBI 7(i) by id before the analyst starts.
+  Scope rule: `in_scope=false` -> `out_of_corpus`, no route/citations/classification. Conflict rule: draft
+  relies on negligence (RBI 7(i) / SBI 4.6.2(b)(i)) or `credentials_shared=true` -> `conflicting_provisions`
+  citing RBI 7(i) + the Table 2 row.
+- An UNVERIFIED escalation (verification_failed, budget, timeout, provider, injection) has empty `basis`,
+  `liability_position`, `citations`, `competing_provisions`; the model's draft is kept only in the trace entry
+  `escalate.unverified_draft`, labelled NOT VERIFIED. Verified escalations (4.1, out_of_corpus) keep them.
 - The system never issues a credit or closes a dispute. Routes allowed: chargeback, provisional_credit,
   decline, escalate.
 - Untrusted free text is injection-scanned and wrapped in delimiters before it reaches a model.

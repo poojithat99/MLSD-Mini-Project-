@@ -67,7 +67,8 @@ def test_ordinary_case_is_recommended_with_resolving_citation(retriever, request
     r = run(request_ok, retriever)
     assert r.status == "recommended" and r.route == "provisional_credit"
     assert r.citations[0].clause_id == "6(ii)" and r.verification.passed
-    assert r.prompt_version == "analysis_v1+verification_v1"
+    from backend.agents.prompts import load_prompt
+    assert r.prompt_version == f"{load_prompt('analysis_v1')[1]}+{load_prompt('verification_v1')[1]}"
 
 
 def test_out_of_corpus_question_escalates(retriever):
@@ -118,21 +119,24 @@ def test_llm_verifier_rejects_unsupported_claim(retriever, request_ok):
     assert r.verification.attempts == 2
 
 
-def test_verifier_sees_only_claims_and_passages(retriever, request_41):
+def test_verifier_sees_no_analyst_reasoning(retriever, request_41):
     llm = client(scenario_script("default"))
     run(request_41, retriever, llm=llm)
     (verifier_call,) = [c for c in llm.primary.calls if "verification agent" in c[0]["content"]]
     assert [m["role"] for m in verifier_call] == ["system", "user"]            # no analyst messages / tool calls
     payload = json.loads(verifier_call[1]["content"])
-    assert set(payload) == {"claims", "outcome", "passages", "facts_computed_by_code"}
-    assert "OTP" not in verifier_call[1]["content"]                            # not even the customer narrative
+    assert set(payload) == {"case_facts", "request", "claims", "outcome", "passages", "facts_computed_by_code"}
+    # the request reaches the verifier only as delimited untrusted data (to check case facts)
+    assert payload["request"]["narrative"].startswith("<<<UNTRUSTED narrative")
+    assert "MODIFIER CHECK" not in verifier_call[1]["content"]                # nothing from the analyst's loop
 
 
 def test_verifier_model_down_forces_escalation(retriever, request_ok):
     r = run(request_ok, retriever, script="verifier_down")
     assert r.status == "escalated" and r.escalation.reason_code.value == "provider_unavailable"
     assert "deterministic citation check passed" in r.escalation.note
-    assert r.citations and not r.verification.passed                    # evidence kept, clearly not verified
+    assert r.citations == [] and r.basis == "" and not r.verification.passed   # nothing unverified shown
+    assert any(t.name == "escalate.unverified_draft" for t in r.trace)          # draft kept, labelled, in trace
 
 
 # ------------------------------------------------------------------ budget + provider failures
