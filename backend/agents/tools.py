@@ -125,6 +125,9 @@ def run_with_timeout(fn: Callable[[], Any], timeout_s: float) -> Any:
 
 # --------------------------------------------------------------------------- #
 # tool specs shown to the model (OpenAI function-calling format)
+# Kept to the JSON-schema subset Gemini's OpenAI-compatible endpoint accepts: no "default",
+# "minimum" or "maximum" (k is clamped in code), and no "parameters" at all for tools without
+# arguments (an empty "properties" object can be rejected).  Check: python -m backend.agents.llm_check --agent-tools
 # --------------------------------------------------------------------------- #
 TOOL_SPECS: list[dict] = [
     {"type": "function", "function": {
@@ -134,9 +137,10 @@ TOOL_SPECS: list[dict] = [
                        "wording (e.g. 'payment credentials', not 'OTP').",
         "parameters": {"type": "object", "properties": {
             "query": {"type": "string"},
-            "k": {"type": "integer", "minimum": 1, "maximum": 10, "default": 5},
-            "expand_refs": {"type": "boolean", "default": False,
-                            "description": "also return passages that cite, or are cited by, the hits"},
+            "k": {"type": "integer", "description": "number of passages, 1 to 10 (default 5)"},
+            "expand_refs": {"type": "boolean",
+                            "description": "also return passages that cite, or are cited by, the hits "
+                                           "(default false)"},
         }, "required": ["query"]}}},
     {"type": "function", "function": {
         "name": "get_clause",
@@ -148,13 +152,11 @@ TOOL_SPECS: list[dict] = [
         }, "required": ["doc_id", "clause_id"]}}},
     {"type": "function", "function": {
         "name": "get_request_fields",
-        "description": "The dispute's structured fields (channel, amount, dates, account type).",
-        "parameters": {"type": "object", "properties": {}}}},
+        "description": "The dispute's structured fields (channel, amount, dates, account type)."}},
     {"type": "function", "function": {
         "name": "compute_reporting_delay",
         "description": "Working days between the bank's communication and the customer's report, as the "
-                       "liability table counts them. Always use this; never count days yourself.",
-        "parameters": {"type": "object", "properties": {}}}},
+                       "liability table counts them. Always use this; never count days yourself."}},
 ]
 TOOL_NAMES = {t["function"]["name"] for t in TOOL_SPECS}
 CODE_ONLY_TOOLS = {"fetch_chunk"}     # used by the agent's own retry code, never offered to the model

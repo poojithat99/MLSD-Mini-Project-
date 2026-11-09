@@ -20,9 +20,11 @@ it, so they never make a real API call.
 """
 from __future__ import annotations
 
+import email.utils
 import json
 import os
 import random
+import re
 import threading
 import time
 from dataclasses import dataclass, field
@@ -106,6 +108,15 @@ def _env_float(name: str, default: float) -> float:
     return float(raw) if raw else default
 
 
+def load_dotenv_if_present() -> None:
+    """Read REPO_ROOT/.env for local runs (python-dotenv is optional). Real env vars win."""
+    try:
+        from dotenv import load_dotenv
+    except ImportError:
+        return
+    load_dotenv(os.path.join(os.path.dirname(__file__), "..", "..", ".env"), override=False)
+
+
 @dataclass(frozen=True)
 class LLMConfig:
     provider: str                 # "openai" (any OpenAI-compatible endpoint) or "fake"
@@ -124,9 +135,12 @@ class LLMConfig:
     cost_per_1k_prompt: float     # USD
     cost_per_1k_completion: float
     fake_scenario: str
+    min_interval_s: float = 0.0   # minimum gap between model calls in this process (free-tier RPM limit)
 
     @classmethod
     def from_env(cls) -> "LLMConfig":
+        """Reads os.environ only.  Command-line tools call load_dotenv_if_present() first;
+        in Docker, compose injects the variables."""
         get = lambda n: (os.environ.get(n) or "").strip() or None  # noqa: E731
         return cls(
             provider=(get("LLM_PROVIDER") or "openai").lower(),
@@ -145,6 +159,7 @@ class LLMConfig:
             cost_per_1k_prompt=_env_float("LLM_COST_PER_1K_PROMPT", 0.0),
             cost_per_1k_completion=_env_float("LLM_COST_PER_1K_COMPLETION", 0.0),
             fake_scenario=(get("LLM_FAKE_SCENARIO") or "default").lower(),
+            min_interval_s=_env_float("LLM_MIN_INTERVAL_S", 0.0),
         )
 
     def cost(self, prompt_tokens: int, completion_tokens: int) -> float:
@@ -203,13 +218,49 @@ class Provider(Protocol):
 
 
 class TransientError(RuntimeError):
-    """A failure worth retrying (timeout, connection, 429, 5xx)."""
+    """A failure worth retrying (timeout, connection, 429, 5xx).
+    ``retry_after`` is the wait in seconds the provider asked for, if it said."""
+
+    def __init__(self, message: str, retry_after: float | None = None):
+        super().__init__(message)
+        self.retry_after = retry_after
+
+
+MAX_RETRY_AFTER_S = 60.0          # never honour an absurd Retry-After
+_RETRY_DELAY_IN_BODY = re.compile(r'"retryDelay"\s*:\s*"(\d+(?:\.\d+)?)s"')   # Google-style error body
+
+
+def retry_after_seconds(response) -> float | None:
+    """Wait requested by a 429: the Retry-After header (seconds or HTTP date), else a
+    Google-style ``"retryDelay": "37s"`` in the error body."""
+    if response is None:
+        return None
+    header = response.headers.get("retry-after")
+    if header:
+        try:
+            return max(0.0, float(header))
+        except ValueError:
+            try:
+                when = email.utils.parsedate_to_datetime(header)
+                return max(0.0, when.timestamp() - time.time())
+            except (TypeError, ValueError):
+                pass
+    m = _RETRY_DELAY_IN_BODY.search(_body(response))
+    return float(m.group(1)) if m else None
+
+
+def _body(response, limit: int = 4000) -> str:
+    try:
+        return response.text[:limit]
+    except Exception:  # noqa: BLE001 - body may be unreadable (streamed/closed)
+        return ""
 
 
 class OpenAICompatProvider:
-    """Any endpoint that speaks the OpenAI chat-completions API."""
+    """Any endpoint that speaks the OpenAI chat-completions API (e.g. Gemini's OpenAI-compatible one)."""
 
-    def __init__(self, name: str, base_url: str | None, model: str | None, api_key: str | None):
+    def __init__(self, name: str, base_url: str | None, model: str | None, api_key: str | None,
+                 http_client=None):
         missing = [n for n, v in (("base URL", base_url), ("model", model), ("API key", api_key)) if not v]
         if missing:
             raise LLMError(f"{name} LLM provider is missing {', '.join(missing)}; set the LLM_* variables (.env.example)")
@@ -219,7 +270,7 @@ class OpenAICompatProvider:
         self.model = model
         self._openai = openai
         # max_retries=0: retries are ours (bounded, with backoff, visible to the breaker)
-        self._client = openai.OpenAI(base_url=base_url, api_key=api_key, max_retries=0)
+        self._client = openai.OpenAI(base_url=base_url, api_key=api_key, max_retries=0, http_client=http_client)
 
     def complete(self, messages: list[dict], tools: list[dict] | None, timeout_s: float) -> LLMResponse:
         oa = self._openai
@@ -228,9 +279,18 @@ class OpenAICompatProvider:
             kwargs["tools"] = tools
         try:
             resp = self._client.chat.completions.create(**kwargs)
-        except (oa.APITimeoutError, oa.APIConnectionError, oa.RateLimitError, oa.InternalServerError) as exc:
+        except oa.RateLimitError as exc:                    # 429: retry, honouring Retry-After
+            wait = retry_after_seconds(exc.response)
+            raise TransientError(f"RateLimitError 429 (retry after {wait}s)", retry_after=wait) from exc
+        except (oa.APITimeoutError, oa.APIConnectionError, oa.InternalServerError) as exc:
             raise TransientError(f"{type(exc).__name__}: {exc}") from exc
-        except oa.OpenAIError as exc:                       # bad request, auth, ...: retrying will not help
+        except oa.APIStatusError as exc:                    # 400/401/403/404...: retrying will not help
+            body = _body(exc.response)
+            # Gemini rejects some JSON-schema features in tool definitions with a 400: the body says which
+            log_event("llm_provider_error", provider=self.name, status=exc.status_code, body=body,
+                      sent_tools=[t["function"]["name"] for t in tools or []])
+            raise LLMError(f"{type(exc).__name__} {exc.status_code}: {body or exc}") from exc
+        except oa.OpenAIError as exc:
             raise LLMError(f"{type(exc).__name__}: {exc}") from exc
         msg = resp.choices[0].message
         calls = []
@@ -293,23 +353,30 @@ class LLMClient:
     def __init__(
         self, primary: Provider, config: LLMConfig, fallback: Provider | None = None,
         breaker: CircuitBreaker | None = None, sleep: Callable[[float], None] = time.sleep,
+        clock: Callable[[], float] = time.monotonic,
     ):
         self.primary = primary
         self.fallback = fallback
         self.config = config
         self.breaker = breaker or CircuitBreaker(config.breaker_threshold, config.breaker_reset_s)
         self.sleep = sleep
+        self.clock = clock
+        self._last_call_at: float | None = None      # for LLM_MIN_INTERVAL_S pacing
+        self._pace_lock = threading.Lock()
 
     def call(
         self, step: str, messages: list[dict], tools: list[dict] | None = None,
         ledger: UsageLedger | None = None, timeout_s: float | None = None,
     ) -> LLMResponse:
-        """One logical model call for ``step``.  Raises ProviderUnavailable if nobody answered."""
+        """One logical model call for ``step``.  Raises ProviderUnavailable if nobody answered.
+        ``timeout_s`` is the time left for this call (e.g. the run's remaining wall-clock):
+        it caps each attempt, and we stop retrying rather than wait past it."""
         timeout = min(self.config.timeout_s, timeout_s) if timeout_s else self.config.timeout_s
+        give_up_at = self.clock() + timeout_s if timeout_s else None
         with span("llm.call", step=step):
             if self.breaker.allow():
                 try:
-                    return self._attempts(self.primary, step, messages, tools, ledger, timeout, self.breaker)
+                    return self._attempts(self.primary, step, messages, tools, ledger, timeout, self.breaker, give_up_at)
                 except ProviderUnavailable as exc:
                     reason = str(exc)
             else:
@@ -317,29 +384,54 @@ class LLMClient:
             log_event("llm_primary_unavailable", step=step, reason=reason, breaker=self.breaker.state)
             if self.fallback is not None:                   # defined fallback path
                 try:
-                    return self._attempts(self.fallback, step, messages, tools, ledger, timeout, None)
+                    return self._attempts(self.fallback, step, messages, tools, ledger, timeout, None, give_up_at)
                 except ProviderUnavailable as exc:
                     reason = f"{reason}; fallback: {exc}"
             if self.breaker.state == CircuitBreaker.OPEN:
                 raise CircuitOpen(reason)
             raise ProviderUnavailable(reason)
 
-    def _attempts(self, provider, step, messages, tools, ledger, timeout, breaker) -> LLMResponse:
-        last = ""
+    def _pace(self) -> None:
+        """Keep at least LLM_MIN_INTERVAL_S between calls from this process (free-tier
+        requests-per-minute limit).  Holding the lock while sleeping queues concurrent callers."""
+        if self.config.min_interval_s <= 0:
+            return
+        with self._pace_lock:
+            if self._last_call_at is not None:
+                wait = self._last_call_at + self.config.min_interval_s - self.clock()
+                if wait > 0:
+                    self.sleep(wait)
+            self._last_call_at = self.clock()
+
+    def _backoff(self, attempt: int, retry_after: float | None) -> float:
+        """Exponential backoff with jitter; a provider's Retry-After wins if it is longer."""
+        delay = min(self.config.backoff_max_s, self.config.backoff_base_s * 2 ** (attempt - 1))
+        delay += random.uniform(0, self.config.backoff_base_s)
+        if retry_after is not None:
+            delay = max(delay, min(retry_after, MAX_RETRY_AFTER_S))
+        return delay
+
+    def _attempts(self, provider, step, messages, tools, ledger, timeout, breaker, give_up_at=None) -> LLMResponse:
+        last, retry_after = "", None
         for attempt in range(self.config.max_attempts):
             if attempt:
-                delay = min(self.config.backoff_max_s, self.config.backoff_base_s * 2 ** (attempt - 1))
-                self.sleep(delay + random.uniform(0, self.config.backoff_base_s))   # jitter
+                delay = self._backoff(attempt, retry_after)
+                if give_up_at is not None and self.clock() + delay >= give_up_at:
+                    last += f" (not retrying: a {delay:.1f}s wait would pass the deadline)"
+                    break
+                self.sleep(delay)
             if breaker is not None and attempt and not breaker.allow():
                 break                                     # opened while we were retrying
+            self._pace()
             start = time.perf_counter()
             try:
                 resp = provider.complete(messages, tools, timeout)
             except TransientError as exc:
-                last = str(exc)
+                last, retry_after = str(exc), exc.retry_after
                 if breaker is not None:
                     breaker.record_failure()
-                log_event("llm_attempt_failed", step=step, provider=provider.name, attempt=attempt + 1, error=last)
+                log_event("llm_attempt_failed", step=step, provider=provider.name, attempt=attempt + 1,
+                          error=last, retry_after=retry_after)
                 continue
             latency_ms = (time.perf_counter() - start) * 1000
             if breaker is not None:

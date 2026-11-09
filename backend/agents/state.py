@@ -14,6 +14,7 @@ before a run starts, so here we only declare shapes.
 """
 from __future__ import annotations
 
+import os
 import time
 from dataclasses import dataclass, field
 from datetime import date
@@ -129,6 +130,8 @@ class DeadlineExceeded(BudgetExhausted):
 
 # Defaults sized for the declared SLO (plan section 9: 60 s hard cap per run).  A normal run makes
 # ~5 model calls (analyst 4 incl. the modifier check, verifier 1); 14 leaves room for both retries.
+# Override per deployment with AGENT_MAX_MODEL_CALLS / AGENT_MAX_TOOL_CALLS / AGENT_WALL_CLOCK_S
+# (Budget.from_env).  With LLM_MIN_INTERVAL_S pacing, raise AGENT_WALL_CLOCK_S to match.
 MAX_STEPS = 14          # model calls per run, both agents, all retries
 MAX_TOOL_CALLS = 16     # tool calls per run
 WALL_CLOCK_S = 60.0     # hard cap per run
@@ -149,6 +152,22 @@ class Budget:
     def __post_init__(self) -> None:
         if self.started < 0:
             self.started = self.clock()
+
+    @classmethod
+    def from_env(cls) -> "Budget":
+        """Per-run limits from AGENT_MAX_MODEL_CALLS, AGENT_MAX_TOOL_CALLS, AGENT_WALL_CLOCK_S
+        (unset or empty = the defaults above)."""
+        def read(name: str, default: float, cast):
+            raw = os.environ.get(name, "").strip()
+            if not raw:
+                return default
+            value = cast(raw)
+            if value <= 0:
+                raise ValueError(f"{name} must be positive, got {raw!r}")
+            return value
+        return cls(max_steps=read("AGENT_MAX_MODEL_CALLS", MAX_STEPS, int),
+                   max_tool_calls=read("AGENT_MAX_TOOL_CALLS", MAX_TOOL_CALLS, int),
+                   wall_clock_s=read("AGENT_WALL_CLOCK_S", WALL_CLOCK_S, float))
 
     def remaining_s(self) -> float:
         return self.wall_clock_s - (self.clock() - self.started)

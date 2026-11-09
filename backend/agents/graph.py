@@ -283,7 +283,7 @@ def run_dispute_graph(
         start = time.perf_counter()
         run = RunContext(
             run_id=run_id, correlation_id=correlation_id, llm=llm or get_llm(),
-            retriever=retriever or _default_retriever(), request=request, budget=budget or Budget(),
+            retriever=retriever or _default_retriever(), request=request, budget=budget or Budget.from_env(),
             analysis_prompt=analysis_prompt,
         )
         state: GraphState = {"request": request, "run": run, "attempts": 0, "strategies_used": []}

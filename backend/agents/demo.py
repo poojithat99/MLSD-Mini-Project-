@@ -18,6 +18,7 @@ import uuid
 from datetime import date
 
 from .graph import run_dispute_graph
+from .llm import load_dotenv_if_present
 from .state import DisputeInput
 
 CASES = {
@@ -52,6 +53,7 @@ def main() -> None:
     ap.add_argument("--trace", action="store_true", help="include the full trace")
     ap.add_argument("--logs", action="store_true", help="print structured log lines")
     args = ap.parse_args()
+    load_dotenv_if_present()
     if args.logs:
         logging.basicConfig(level=logging.INFO, format="%(message)s")
     if args.retriever == "keyword":
