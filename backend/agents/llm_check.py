@@ -1,6 +1,7 @@
 """Check the configured model provider through llm.py (the same path the agents use).
 
-    python -m backend.agents.llm_check                 # (a) plain completion, (b) one trivial tool
+    python -m backend.agents.llm_check                 # (a) plain completion, (b) one trivial tool,
+                                                       # (d) two-turn tool loop (thought signatures)
     python -m backend.agents.llm_check --agent-tools   # (c) also send the agents' real tool definitions
 
 Reads LLM_* from the environment (and .env if present).  Prints each result,
@@ -16,7 +17,10 @@ import sys
 import time
 from urllib.parse import urlparse
 
-from .llm import LLMClient, LLMConfig, UsageLedger, build_client, load_dotenv_if_present
+from .llm import (
+    THOUGHT_SIGNATURE_FALLBACK, LLMClient, LLMConfig, UsageLedger, assistant_tool_call_message, build_client,
+    load_dotenv_if_present,
+)
 from .tools import TOOL_SPECS
 
 TRIVIAL_TOOL = {"type": "function", "function": {
@@ -70,9 +74,28 @@ def run_checks(client: LLMClient, agent_tools: bool = False) -> bool:
         return [f"accepted {len(TOOL_SPECS)} tool definitions",
                 f"tool_calls: {[(tc.name, tc.arguments) for tc in resp.tool_calls]}", _usage(ledger)]
 
+    def two_turn():
+        """Model calls a tool, we send back a fake result, model answers: the history replays the
+        assistant tool call, which is exactly where Gemini demands the thought signature."""
+        messages = [{"role": "user", "content": "What time is it in Asia/Kolkata? Use the get_time tool, "
+                                                "then answer in one sentence."}]
+        first = client.call("llm_check.two_turn.1", messages, tools=[TRIVIAL_TOOL], ledger=ledger)
+        if not first.tool_calls:
+            raise RuntimeError(f"turn 1: model answered without calling the tool: {first.content!r}")
+        replay = assistant_tool_call_message(first)
+        sigs = [(c.get("extra_content") or {}).get("google", {}).get("thought_signature") for c in replay["tool_calls"]]
+        lines = ["turn 1 " + _usage(ledger), "thought_signature per call: " + ", ".join(
+            "dummy fallback" if x == THOUGHT_SIGNATURE_FALLBACK else f"present ({len(x)} chars)" for x in sigs)]
+        messages.append(replay)
+        for tc in first.tool_calls:
+            messages.append({"role": "tool", "tool_call_id": tc.id, "content": '{"time": "14:05 IST"}'})
+        second = client.call("llm_check.two_turn.2", messages, tools=[TRIVIAL_TOOL], ledger=ledger)
+        return lines + [f"turn 2 content: {second.content!r}", "turn 2 " + _usage(ledger)]
+
     results = [_check("a) plain completion", plain), _check("b) trivial tool call", tool_call)]
     if agent_tools:
         results.append(_check("c) agents' tool definitions", real_tools))
+    results.append(_check("d) two-turn tool loop (tool call -> result -> answer)", two_turn))
     print(f"\n{sum(results)}/{len(results)} checks passed; total cost_usd={ledger.total_cost():.6f}")
     return all(results)
 

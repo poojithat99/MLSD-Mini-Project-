@@ -181,17 +181,19 @@ def test_graph_uses_env_budget(monkeypatch, retriever, request_ok):
 # ------------------------------------------------------------------ llm_check script
 def test_llm_check_passes_with_a_working_provider(capsys):
     from backend.agents.llm import LLMResponse, ToolCall
-    fake = FakeLLM(["pong", LLMResponse(tool_calls=[ToolCall("1", "get_time", {"timezone": "Asia/Kolkata"})])])
+    call = lambda: LLMResponse(tool_calls=[ToolCall("1", "get_time", {"timezone": "Asia/Kolkata"})])  # noqa: E731
+    fake = FakeLLM(["pong", call(), call(), "It is 14:05 IST."])
     assert run_checks(LLMClient(fake, make_config(), sleep=lambda s: None)) is True
     out = capsys.readouterr().out
-    assert "content: 'pong'" in out and "get_time" in out and "prompt_tokens=" in out and "2/2 checks passed" in out
+    assert "content: 'pong'" in out and "get_time" in out and "prompt_tokens=" in out and "3/3 checks passed" in out
+    assert "dummy fallback" in out and "turn 2 content: 'It is 14:05 IST.'" in out
 
 
 def test_llm_check_reports_errors_clearly(capsys):
     fake = FakeLLM([LLMError("BadRequestError 400: Unknown name \"default\""), "no tool call here"])
     assert run_checks(LLMClient(fake, make_config(), sleep=lambda s: None)) is False
     out = capsys.readouterr().out
-    assert "FAIL" in out and "Unknown name" in out and "without calling the tool" in out and "0/2" in out
+    assert "FAIL" in out and "Unknown name" in out and "without calling the tool" in out and "0/3" in out
 
 
 def test_library_config_never_reads_dotenv(monkeypatch):

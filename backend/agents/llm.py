@@ -56,6 +56,11 @@ class ToolCall:
     id: str
     name: str
     arguments: dict
+    # Provider data that must be sent back unchanged when this call is replayed in the history.
+    # Gemini puts its thought signature here: {"google": {"thought_signature": "..."}}; without it,
+    # the next request fails with 400 "Function call is missing a thought_signature".
+    extra_content: dict | None = None
+    raw_arguments: str | None = None      # the provider's exact argument string, replayed verbatim
 
 
 @dataclass
@@ -299,13 +304,46 @@ class OpenAICompatProvider:
                 args = json.loads(tc.function.arguments or "{}")
             except json.JSONDecodeError:
                 args = {"_unparseable": tc.function.arguments}
-            calls.append(ToolCall(id=tc.id, name=tc.function.name, arguments=args))
+            calls.append(ToolCall(id=tc.id, name=tc.function.name, arguments=args,
+                                  extra_content=_extra_content(tc), raw_arguments=tc.function.arguments))
         usage = resp.usage
         return LLMResponse(
             content=msg.content, tool_calls=calls,
             prompt_tokens=getattr(usage, "prompt_tokens", 0) or 0,
             completion_tokens=getattr(usage, "completion_tokens", 0) or 0,
         )
+
+
+def _extra_content(tc) -> dict | None:
+    """``extra_content`` is not part of the OpenAI schema, so the SDK keeps it as an extra field."""
+    extra = (getattr(tc, "model_extra", None) or {}).get("extra_content")
+    if extra is None and hasattr(tc, "model_dump"):
+        extra = tc.model_dump().get("extra_content")
+    return extra
+
+
+THOUGHT_SIGNATURE_FALLBACK = "skip_thought_signature_validator"   # Gemini's documented dummy value
+
+
+def assistant_tool_call_message(resp: LLMResponse) -> dict:
+    """The assistant turn that made ``resp.tool_calls``, rebuilt for the next request.
+
+    Every tool call is replayed in order, with its ``extra_content`` unchanged.  A call with
+    no stored signature (FakeLLM histories, or a provider that sent none) gets Gemini's
+    documented dummy signature, so Gemini accepts the history instead of rejecting it."""
+    calls = []
+    for tc in resp.tool_calls:
+        extra = tc.extra_content
+        if not ((extra or {}).get("google") or {}).get("thought_signature"):
+            extra = {**(extra or {}), "google": {**((extra or {}).get("google") or {}),
+                                                 "thought_signature": THOUGHT_SIGNATURE_FALLBACK}}
+        calls.append({
+            "id": tc.id, "type": "function",
+            "function": {"name": tc.name,
+                         "arguments": tc.raw_arguments if tc.raw_arguments is not None else json.dumps(tc.arguments)},
+            "extra_content": extra,
+        })
+    return {"role": "assistant", "content": resp.content or "", "tool_calls": calls}
 
 
 Script = list | Callable[[list[dict], list[dict] | None], "LLMResponse | Exception"]

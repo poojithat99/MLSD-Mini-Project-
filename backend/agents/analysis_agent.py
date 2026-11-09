@@ -26,7 +26,7 @@ import json
 
 from pydantic import ValidationError
 
-from .llm import LLMError, parse_json_object
+from .llm import LLMError, assistant_tool_call_message, parse_json_object
 from .observability import log_event
 from .prompts import load_prompt
 from .state import AnalysisDraft, BudgetExhausted, DisputeInput, TraceEntry, Verdict
@@ -85,12 +85,6 @@ def _retry_message(run, strategy: str, verdict: Verdict | None, previous: Analys
     return "\n\n".join(lines)
 
 
-def _assistant_tool_message(resp) -> dict:
-    return {"role": "assistant", "content": resp.content or "", "tool_calls": [
-        {"id": tc.id, "type": "function", "function": {"name": tc.name, "arguments": json.dumps(tc.arguments)}}
-        for tc in resp.tool_calls]}
-
-
 def run_analysis(run, request: DisputeInput, strategy: str | None = None,
                  verdict: Verdict | None = None, previous: AnalysisDraft | None = None) -> AnalysisDraft:
     system, _version = load_prompt(run.analysis_prompt)
@@ -105,7 +99,7 @@ def run_analysis(run, request: DisputeInput, strategy: str | None = None,
         resp = run.call_llm("analysis", messages, tools=TOOL_SPECS)
 
         if resp.tool_calls:                               # the agent chose to call tools
-            messages.append(_assistant_tool_message(resp))
+            messages.append(assistant_tool_call_message(resp))   # keeps Gemini thought signatures
             for tc in resp.tool_calls:
                 messages.append({"role": "tool", "tool_call_id": tc.id,
                                  "content": run.toolbox.run(tc.name, tc.arguments)})
