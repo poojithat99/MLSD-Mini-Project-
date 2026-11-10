@@ -26,7 +26,7 @@ from backend.retrieval.search import _norm_clause_id
 from .llm import LLMError, parse_json_object
 from .observability import log_event
 from .prompts import load_prompt
-from .state import AnalysisDraft, Citation, ReasonCode, RetrievedPassage, Verdict
+from .state import LOAD_BEARING_FACTS, AnalysisDraft, Citation, ReasonCode, RetrievedPassage, Verdict
 
 MIN_QUOTE_CHARS = 20          # a quote must be long enough to mean something ("the bank" is not evidence)
 
@@ -119,7 +119,9 @@ def llm_check(run, draft: AnalysisDraft) -> Verdict:
     problems = [f"unsupported by the cited passages: {c}" for i, c in enumerate(claims) if not claim_ok.get(i)]
     for i, f in enumerate(facts):
         status = fact_status.get(i)
-        if status == "contradicts":
+        if f in LOAD_BEARING_FACTS and status != "consistent":
+            problems.append(f"load-bearing case fact not confirmed by the request ({status}): {f}")
+        elif status == "contradicts":
             problems.append(f"case fact contradicts the request: {f}")
         elif status == "not_a_case_fact":
             problems.append(f"regulatory statement filed as a case fact (not checked against passages): {f}")
@@ -134,9 +136,64 @@ def llm_check(run, draft: AnalysisDraft) -> Verdict:
     return Verdict(decision="pass")
 
 
+UNAUTHORISED_CLASSES = {"cnp_fraud", "skimming", "upi_social_eng"}
+CARD_DISPUTE_CLASSES = {"duplicate", "merchant_dispute"}
+
+
+def route_problems(draft: AnalysisDraft, working_days: int | None, alert_date_known: bool = True) -> list[str]:
+    """Deterministic route check: is the proposed route consistent with the liability rules,
+    given the model's own findings and the delay computed by code?  Applies in this order:
+
+      card dispute (duplicate / merchant_dispute)        -> chargeback
+      bank at fault (bank_fault, RBI 6(i))               -> provisional_credit citing RBI 6(i),
+                                                            whatever the reporting delay
+      credentials shared                                  -> not checked here (escalation decides)
+      communication (alert) date unknown                  -> no recommendation: Table 2 counts from receipt
+                                                            of the communication, so escalate contested_fault
+      otherwise a third-party breach, by RBI Table 2:
+        <= 7 working days (zero / limited liability)      -> provisional_credit
+        >  7 working days (bank's Board-approved policy;
+            SBI Table 2: customer liability is full)      -> decline
+
+    Escalations and out-of-scope drafts are not checked.  A mismatch is a verification problem:
+    the analyst is asked to retry; the code never changes the route itself."""
+    if draft.escalate or not draft.in_scope or draft.route is None:
+        return []
+    cls, route = draft.classification, draft.route
+    if cls in CARD_DISPUTE_CLASSES:
+        return [] if route == "chargeback" else [f"a {cls} is routed to chargeback, not {route}"]
+    if cls not in UNAUTHORISED_CLASSES or draft.credentials_shared is True:
+        return []
+    if draft.bank_fault is True:
+        problems = []
+        if route != "provisional_credit":
+            problems.append(f"bank_fault is true: RBI 6(i) gives zero liability irrespective of when the "
+                            f"transaction is reported, so the route must be provisional_credit (got {route})")
+        if not any(c.doc_id == "rbi_circular_2017" and _clause_key(c.clause_id) == "6(i)" for c in draft.citations):
+            problems.append("bank_fault is true: the recommendation must cite rbi_circular_2017 6(i)")
+        return problems
+    if not alert_date_known:
+        return [f"the date the customer received the bank's communication is unknown, so the RBI Table 2 row "
+                f"cannot be applied (it counts from receipt) and fault is unsettled (RBI para 5: mandatory SMS "
+                f"alerts): escalate with reason_code contested_fault instead of route {route}"]
+    if working_days is None:
+        return []
+    expected = "provisional_credit" if working_days <= 7 else "decline"
+    if route != expected:
+        return [f"route {route} contradicts the liability table for a third-party breach reported after "
+                f"{working_days} working days (RBI Table 2; SBI Table 2 beyond 7): expected {expected}"]
+    return []
+
+
 def verify(run, draft: AnalysisDraft) -> Verdict:
-    # (a) deterministic, free, always runs first
+    # (a) deterministic, free, always runs first: citations (unchanged), then the route check
     problems = deterministic_check(draft, run.evidence)
+    if not problems:
+        # The table rule needs the delay counted from receipt of the bank's communication; when that date
+        # is unknown our calculator counts from the transaction date, an assumption no route may rest on.
+        delay = run.delay or {}
+        known = delay.get("counted_from_field", "communication_date") == "communication_date"
+        problems = route_problems(draft, delay.get("working_days"), alert_date_known=known)
     if problems:
         hint = "neighbour_clause" if any("does not resolve" in p for p in problems) else "wider_k"
         log_event("verification", stage="deterministic", decision="retry", problems=problems)

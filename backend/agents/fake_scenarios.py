@@ -73,7 +73,9 @@ class ScriptedAgents:
         payload = json.loads(messages[1]["content"])
         claims = [{"index": c["index"], "supported": True, "reason": "stated in the cited passage"}
                   for c in payload["claims"]]
-        return LLMResponse(content=json.dumps({"claims": claims, "missed_provision": None}))
+        # lenient on facts: the scripted analyst only asserts facts its own rules read from the narrative
+        facts = [{"index": f["index"], "status": "consistent"} for f in payload.get("case_facts", [])]
+        return LLMResponse(content=json.dumps({"claims": claims, "case_facts": facts, "missed_provision": None}))
 
     # ------------------------------------------------------------------ analyst
     def _analyse(self, messages: list[dict]) -> LLMResponse:
@@ -141,7 +143,9 @@ class ScriptedAgents:
                           "skimming" if re.search(r"card_present|\batm\b|\bpos\b", low) else "cnp_fraud")
         d = {"classification": classification, "route": None, "basis": "", "liability_position": "",
              "claims": [f"The reporting delay is {delay} working days."], "citations": [],
-             "escalate": False, "reason_code": None, "competing_provisions": [], "note": ""}
+             "escalate": False, "reason_code": None, "competing_provisions": [], "note": "",
+             # a well-behaved model reports the premises the prompt asks for
+             "credentials_shared": kind in ("conflict", "negligence"), "bank_fault": False}
         cite = lambda *a: self._cite(passages, *a)   # noqa: E731
         if kind == "out_of_corpus":
             d.update(classification=None, escalate=True, reason_code="out_of_corpus",

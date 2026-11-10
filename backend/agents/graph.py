@@ -29,7 +29,7 @@ from .llm import LLMClient, LLMError, LLMResponse, ProviderUnavailable, UsageLed
 from .observability import log_event, run_context, span
 from .prompts import load_prompt
 from .state import (
-    Budget, BudgetExhausted, DeadlineExceeded, DisputeInput, DisputeResult, Escalation, GraphState,
+    Budget, BudgetExhausted, DeadlineExceeded, env_flag, DisputeInput, DisputeResult, Escalation, GraphState,
     ReasonCode, RetrievedPassage, TraceEntry, Verification,
 )
 from .tools import RetrieverPort, Toolbox, compute_reporting_delay
@@ -55,6 +55,7 @@ class RunContext:
     trace: list[TraceEntry] = field(default_factory=list)
     evidence: dict[str, RetrievedPassage] = field(default_factory=dict)
     delay: dict | None = None
+    seed_provisions: bool = True          # AGENT_SEED_PROVISIONS: code pre-fetches Table 2 row + RBI 7(i)
     table_row: Any = None                 # Citation of the liability-table row for the delay (analysis_agent)
     toolbox: Toolbox | None = None
 
@@ -280,9 +281,10 @@ _RETRIEVER: RetrieverPort | None = None
 def run_dispute_graph(
     request: Any, run_id: str, correlation_id: str, *,
     llm: LLMClient | None = None, retriever: RetrieverPort | None = None, budget: Budget | None = None,
-    analysis_prompt: str = "analysis_v1",
+    analysis_prompt: str = "analysis_v1", seed_provisions: bool | None = None,
 ) -> DisputeResult:
-    """Run one dispute through the graph.  Always returns a DisputeResult, never raises."""
+    """Run one dispute through the graph.  Always returns a DisputeResult, never raises.
+    ``seed_provisions`` overrides AGENT_SEED_PROVISIONS (default on) for this run."""
     if not isinstance(request, DisputeInput):
         data = request.model_dump() if hasattr(request, "model_dump") else dict(request)
         request = DisputeInput.model_validate(data)
@@ -292,7 +294,13 @@ def run_dispute_graph(
             run_id=run_id, correlation_id=correlation_id, llm=llm or get_llm(),
             retriever=retriever or _default_retriever(), request=request, budget=budget or Budget.from_env(),
             analysis_prompt=analysis_prompt,
+            seed_provisions=env_flag("AGENT_SEED_PROVISIONS", True) if seed_provisions is None else seed_provisions,
         )
+        # run configuration, first in the trace, so every result says which mode produced it
+        run.trace.append(TraceEntry(type="node", name="run.config", detail={
+            "seed_provisions": run.seed_provisions, "analysis_prompt": analysis_prompt,
+            "max_model_calls": run.budget.max_steps, "max_tool_calls": run.budget.max_tool_calls,
+            "wall_clock_s": run.budget.wall_clock_s}))
         state: GraphState = {"request": request, "run": run, "attempts": 0, "strategies_used": []}
         try:
             final = _GRAPH.invoke(state)

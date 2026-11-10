@@ -106,6 +106,8 @@ class GeminiLike:
             cites = [cite("sbi_policy_2021", "4.6.2(b)(i)", "entire loss")]
             d.update(route="decline", basis="SBI 4.6.2(b)(i): customer negligence.",
                      liability_position="Customer bears the entire loss.")
+            if "credentials_shared" in system:          # asked explicitly, the model answers from the facts
+                d["credentials_shared"] = True
         elif self.kind == "41_otp":
             facts = ["The customer shared payment credentials (an OTP) with a caller."]
             claims = ["For a report beyond 7 working days, liability is as per the bank's Board approved policy."]

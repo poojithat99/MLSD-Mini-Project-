@@ -138,6 +138,18 @@ WALL_CLOCK_S = 60.0     # hard cap per run
 TOOL_TIMEOUT_S = 10.0   # per tool call
 
 
+def env_flag(name: str, default: bool) -> bool:
+    """Boolean env var: 1/true/yes/on or 0/false/no/off (unset or empty = default)."""
+    raw = os.environ.get(name, "").strip().lower()
+    if not raw:
+        return default
+    if raw in ("1", "true", "yes", "on"):
+        return True
+    if raw in ("0", "false", "no", "off"):
+        return False
+    raise ValueError(f"{name} must be on/off (1/0, true/false), got {raw!r}")
+
+
 @dataclass
 class Budget:
     """Shared by every agent and every retry of one run, so retries cannot extend it."""
@@ -210,6 +222,14 @@ class RetrievedPassage(BaseModel):
     referenced_by: list[str] = Field(default_factory=list)
 
 
+# Load-bearing case facts: each one changes the route, so the request must CONFIRM it ("consistent");
+# "not stated" is not enough.  Added to the draft's case_facts by analysis_agent when the model asserts them.
+CREDENTIALS_FACT = "The customer shared payment credentials (such as an OTP, PIN or password) with another person."
+BANK_FAULT_FACT = ("The request states that the bank's own systems, staff or processes were at fault "
+                   "(e.g. a breach of the bank's systems or a bank error).")
+LOAD_BEARING_FACTS = (CREDENTIALS_FACT, BANK_FAULT_FACT)
+
+
 class AnalysisDraft(BaseModel):
     """What the analysis agent hands to the verifier."""
     classification: Classification | None = None
@@ -218,6 +238,7 @@ class AnalysisDraft(BaseModel):
     liability_position: str = ""
     in_scope: bool = True                                  # False: not an unauthorised electronic transaction
     credentials_shared: bool | None = None                 # did the customer share payment credentials? (None: unclear)
+    bank_fault: bool | None = None                         # was the bank itself at fault (RBI 6(i))? (None: unclear)
     case_facts: list[str] = Field(default_factory=list)   # statements about THIS dispute (checked against the request)
     claims: list[str] = Field(default_factory=list)       # regulatory statements (checked against the passages)
     citations: list[Citation] = Field(default_factory=list)

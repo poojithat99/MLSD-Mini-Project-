@@ -89,7 +89,7 @@ def test_real_sdk_429_retry_after_header_then_success():
 def test_real_sdk_429_google_retry_delay_in_body():
     clock = FakeClock()
     body = [{"error": {"code": 429, "status": "RESOURCE_EXHAUSTED", "details": [
-        {"@type": "type.googleapis.com/google.rpc.RetryInfo", "retryDelay": "12s"}]}}]
+        {"@type": "type.example.test/RetryInfo", "retryDelay": "12s"}]}}]
     provider, _ = sdk_provider([httpx.Response(429, json=body), httpx.Response(200, json=OK_BODY)])
     LLMClient(provider, make_config(), sleep=clock.sleep, clock=clock).call("analysis", MSG)
     assert clock.sleeps[0] >= 12.0
