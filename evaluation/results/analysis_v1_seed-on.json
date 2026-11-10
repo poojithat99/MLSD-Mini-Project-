@@ -1,0 +1,7008 @@
+{
+ "meta": {
+  "analysis_prompt": "analysis_v1",
+  "seed_provisions": true,
+  "prompt_versions": "analysis_v1.4+verification_v1.1",
+  "code_fingerprint": "c2e02194d127",
+  "judge_prompt": "judge_v1",
+  "created_at": "2026-11-10T07:49:36+00:00",
+  "updated_at": "2026-11-10T09:16:26+00:00"
+ },
+ "runs": {
+  "S01": {
+   "status": "done",
+   "scenario_hash": "4d77112e2f0d701f",
+   "result": {
+    "run_id": "eval-S01",
+    "status": "recommended",
+    "classification": "cnp_fraud",
+    "reporting_delay_working_days": 1,
+    "route": "provisional_credit",
+    "basis": "Under RBI Table 2 and para 6(ii), reporting a third-party breach within 3 working days entitles the customer to zero liability.",
+    "liability_position": "Zero liability as the customer reported the unauthorized transaction within 3 working days of receiving the communication.",
+    "citations": [
+     {
+      "clause_id": "Table 2",
+      "doc_id": "rbi_circular_2017",
+      "quote": "Within 3 working days | Zero liability"
+     },
+     {
+      "clause_id": "6(ii)",
+      "doc_id": "rbi_circular_2017",
+      "quote": "(ii) Third party breach where the deficiency lies neither with the bank nor with the customer but lies elsewhere in the system, and the customer notifies the bank within three working days of receiving the communication from the bank regarding the unauthorised transaction."
+     }
+    ],
+    "escalation": null,
+    "verification": {
+     "passed": true,
+     "attempts": 1,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.07891608402132988,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.16004126518964767,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.28354115784168243,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "7(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.04045804962515831,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "6(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1574.0301674231887,
+      "prompt_tokens": 2784,
+      "completion_tokens": 28,
+      "cost_usd": 0.0009052,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 121.35012494400144,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "card not present third party breach zero liability rbi table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6",
+        "rbi_circular_2017:p8#2",
+        "sbi_policy_2021:compensation-policy:4.6.2(a)",
+        "rbi_circular_2017:table-1",
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1911.7362080141902,
+      "prompt_tokens": 4366,
+      "completion_tokens": 30,
+      "cost_usd": 0.0013847999999999998,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 52.06820880994201,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "board approved policy sbi customer liability third party breach within 3 working days"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:11#1",
+        "sbi_policy_2021:customer-rights-policy:2(ix)",
+        "sbi_policy_2021:compensation-policy:4.6.2(a)",
+        "rbi_circular_2017:table-2",
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 3072.510541882366,
+      "prompt_tokens": 5699,
+      "completion_tokens": 486,
+      "cost_usd": 0.0029246999999999997,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 2704.223624896258,
+      "prompt_tokens": 6295,
+      "completion_tokens": 462,
+      "cost_usd": 0.0030434999999999998,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": true,
+       "queries": [
+        "card not present third party breach zero liability rbi table 2",
+        "board approved policy sbi customer liability third party breach within 3 working days"
+       ],
+       "strategy": null
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 20717.28358324617,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "verification",
+      "latency_ms": 2375.4599168896675,
+      "prompt_tokens": 1461,
+      "completion_tokens": 334,
+      "cost_usd": 0.0012732999999999998,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "pass",
+       "strategy_hint": null,
+       "unsupported_claims": [],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 5671.642042230815,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.output",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "blocked": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "finalize",
+      "latency_ms": 0.2621253952383995,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": 1.0,
+     "delay": true,
+     "outcome_correct": true
+    },
+    "groundedness": 1.0,
+    "faithfulness": 1.0,
+    "context_relevance": 0.7,
+    "hallucinated": false,
+    "n_claims": 2,
+    "n_retrieved": 8,
+    "unresolved_citations": [],
+    "judged": true,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 1,
+    "prompt_tokens": 1626,
+    "completion_tokens": 270,
+    "cost_usd": 0.0011628
+   }
+  },
+  "S02": {
+   "status": "done",
+   "scenario_hash": "fdc70b394e1305f2",
+   "result": {
+    "run_id": "eval-S02",
+    "status": "recommended",
+    "classification": "skimming",
+    "reporting_delay_working_days": 3,
+    "route": "provisional_credit",
+    "basis": "Under RBI circular para 6(ii) and Table 2, for a third-party breach where the customer notifies the bank within 3 working days of receiving communication, the customer has zero liability.",
+    "liability_position": "Zero liability; provisional credit of ₹20,000.0 is due to the customer.",
+    "citations": [
+     {
+      "clause_id": "Table 2",
+      "doc_id": "rbi_circular_2017",
+      "quote": "Within 3 working days | Zero liability"
+     },
+     {
+      "clause_id": "6(ii)",
+      "doc_id": "rbi_circular_2017",
+      "quote": "Third party breach where the deficiency lies neither with the bank nor with the customer but lies elsewhere in the system, and the customer notifies the bank within three working days of receiving the communication from the bank regarding the unauthorised transaction."
+     }
+    ],
+    "escalation": null,
+    "verification": {
+     "passed": true,
+     "attempts": 1,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.17045903950929642,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.4237503744661808,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.11841580271720886,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "7(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.07720803841948509,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "6(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1485.5387499555945,
+      "prompt_tokens": 2742,
+      "completion_tokens": 24,
+      "cost_usd": 0.0008825999999999999,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 53.25729167088866,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "skimming card cloned ATM third party breach liability"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:2",
+        "rbi_circular_2017:6",
+        "sbi_policy_2021:compensation-policy:4.6.2(a)",
+        "rbi_circular_2017:p8#2",
+        "sbi_policy_2021:compensation-policy:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1316.6429167613387,
+      "prompt_tokens": 4036,
+      "completion_tokens": 28,
+      "cost_usd": 0.0012808,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 46.55774962157011,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "Table 2 third party breach within 3 working days zero liability"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2",
+        "sbi_policy_2021:compensation-policy:table-2",
+        "rbi_circular_2017:6",
+        "sbi_policy_2021:compensation-policy:4.6.2(a)",
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 3606.4916672185063,
+      "prompt_tokens": 5625,
+      "completion_tokens": 513,
+      "cost_usd": 0.0029699999999999996,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": true,
+       "queries": [
+        "skimming card cloned ATM third party breach liability",
+        "Table 2 third party breach within 3 working days zero liability"
+       ],
+       "strategy": null
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 19466.3564581424,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "verification",
+      "latency_ms": 4872.493375092745,
+      "prompt_tokens": 1457,
+      "completion_tokens": 283,
+      "cost_usd": 0.0011446,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "pass",
+       "strategy_hint": null,
+       "unsupported_claims": [],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 7269.247124902904,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.output",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "blocked": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "finalize",
+      "latency_ms": 0.23675011470913887,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": 1.0,
+     "delay": true,
+     "outcome_correct": true
+    },
+    "groundedness": 0.5,
+    "faithfulness": 0.5,
+    "context_relevance": 0.75,
+    "hallucinated": true,
+    "n_claims": 2,
+    "n_retrieved": 8,
+    "unresolved_citations": [],
+    "judged": true,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 1,
+    "prompt_tokens": 1661,
+    "completion_tokens": 247,
+    "cost_usd": 0.0011158000000000001
+   }
+  },
+  "S03": {
+   "status": "done",
+   "scenario_hash": "81d2b499b5c86fe7",
+   "result": {
+    "run_id": "eval-S03",
+    "status": "recommended",
+    "classification": "cnp_fraud",
+    "reporting_delay_working_days": 16,
+    "route": "provisional_credit",
+    "basis": "Bank fault zero liability under RBI circular para 6(i)",
+    "liability_position": "Zero customer liability",
+    "citations": [
+     {
+      "clause_id": "6(i)",
+      "doc_id": "rbi_circular_2017",
+      "quote": "(i) Contributory fraud/ negligence/ deficiency on the part of the bank (irrespective of whether or not the transaction is reported by the customer)"
+     }
+    ],
+    "escalation": null,
+    "verification": {
+     "passed": true,
+     "attempts": 1,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.1982497051358223,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.38562482222914696,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.13241590932011604,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "7(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.08133286610245705,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "6(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 8256.745749618858,
+      "prompt_tokens": 2807,
+      "completion_tokens": 24,
+      "cost_usd": 0.0009020999999999999,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 50.19220896065235,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "third party breach customer liability board approved policy SBI"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:11#1",
+        "sbi_policy_2021:customer-rights-policy:2(ix)",
+        "rbi_circular_2017:11#2",
+        "sbi_policy_2021:customer-grievances-redressal-policy:10#4",
+        "sbi_policy_2021:customer-grievances-redressal-policy:2#4"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1177.5628328323364,
+      "prompt_tokens": 3951,
+      "completion_tokens": 27,
+      "cost_usd": 0.0012527999999999997,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 20.34700009971857,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "SBI policy 4.6 unauthorized electronic banking transactions liability table"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:2",
+        "sbi_policy_2021:compensation-policy:4.6.1(c)",
+        "sbi_policy_2021:compensation-policy:4.6.5",
+        "sbi_policy_2021:customer-grievances-redressal-policy:4(iv)#1",
+        "rbi_circular_2017:11#1"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1999.1043750196695,
+      "prompt_tokens": 5234,
+      "completion_tokens": 337,
+      "cost_usd": 0.0024127000000000003,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": true,
+       "queries": [
+        "third party breach customer liability board approved policy SBI",
+        "SBI policy 4.6 unauthorized electronic banking transactions liability table"
+       ],
+       "strategy": null
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 16312.657707836479,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "verification",
+      "latency_ms": 6543.877041898668,
+      "prompt_tokens": 1241,
+      "completion_tokens": 346,
+      "cost_usd": 0.0012372999999999998,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "pass",
+       "strategy_hint": null,
+       "unsupported_claims": [],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 10544.318708125502,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.output",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "blocked": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "finalize",
+      "latency_ms": 0.09766733273863792,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": 1.0,
+     "delay": true,
+     "outcome_correct": true
+    },
+    "groundedness": 1.0,
+    "faithfulness": 1.0,
+    "context_relevance": 0.45,
+    "hallucinated": false,
+    "n_claims": 1,
+    "n_retrieved": 12,
+    "unresolved_citations": [],
+    "judged": true,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 1,
+    "prompt_tokens": 1855,
+    "completion_tokens": 225,
+    "cost_usd": 0.001119
+   }
+  },
+  "S04": {
+   "status": "done",
+   "scenario_hash": "6f8a4ddce50e78bd",
+   "result": {
+    "run_id": "eval-S04",
+    "status": "recommended",
+    "classification": "cnp_fraud",
+    "reporting_delay_working_days": 4,
+    "route": "provisional_credit",
+    "basis": "The customer reported the unauthorised card-not-present transaction within 4 to 7 working days, which under RBI Table 2 limits the customer liability to the transaction value or the amount mentioned in Table 1, whichever is lower.",
+    "liability_position": "The customer's liability is limited to the transaction value or the amount mentioned in Table 1, whichever is lower.",
+    "citations": [
+     {
+      "clause_id": "Table 2",
+      "doc_id": "rbi_circular_2017",
+      "quote": "Within 4 to 7 working days | The transaction value or the amount mentioned in Table 1, whichever is lower"
+     }
+    ],
+    "escalation": null,
+    "verification": {
+     "passed": true,
+     "attempts": 1,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.1638340763747692,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.364791601896286,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.13341614976525307,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "7(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.08529238402843475,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "6(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1300.6452918052673,
+      "prompt_tokens": 2798,
+      "completion_tokens": 27,
+      "cost_usd": 0.0009069,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 45.84216699004173,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "unauthorised electronic banking transactions third party breach liability Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:2",
+        "sbi_policy_2021:compensation-policy:4.6.5",
+        "sbi_policy_2021:compensation-policy:4.6.3",
+        "sbi_policy_2021:compensation-policy:4.6.2(a)",
+        "rbi_circular_2017:5#2"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 8812.11620895192,
+      "prompt_tokens": 4069,
+      "completion_tokens": 30,
+      "cost_usd": 0.0012956999999999999,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 47.224916983395815,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "Board-approved policy beyond 7 working days Table 2 RBI circular"
+       },
+       "chunk_ids": [
+        "sbi_policy_2021:compensation-policy:3",
+        "sbi_policy_2021:compensation-policy:1",
+        "sbi_policy_2021:compensation-policy:5~2",
+        "sbi_policy_2021:customer-grievances-redressal-policy:3~2",
+        "sbi_policy_2021:customer-grievances-redressal-policy:7"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 9352.391707710922,
+      "prompt_tokens": 4943,
+      "completion_tokens": 368,
+      "cost_usd": 0.0024029,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": true,
+       "queries": [
+        "unauthorised electronic banking transactions third party breach liability Table 2",
+        "Board-approved policy beyond 7 working days Table 2 RBI circular"
+       ],
+       "strategy": null
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 28442.77041684836,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "verification",
+      "latency_ms": 2510.3617501445115,
+      "prompt_tokens": 1284,
+      "completion_tokens": 330,
+      "cost_usd": 0.0012102,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "pass",
+       "strategy_hint": null,
+       "unsupported_claims": [],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 2511.1233750358224,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.output",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "blocked": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "finalize",
+      "latency_ms": 0.249374657869339,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": 0.3333333333333333,
+     "delay": true,
+     "outcome_correct": true
+    },
+    "groundedness": 1.0,
+    "faithfulness": 1.0,
+    "context_relevance": 0.2,
+    "hallucinated": false,
+    "n_claims": 2,
+    "n_retrieved": 13,
+    "unresolved_citations": [],
+    "judged": true,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 1,
+    "prompt_tokens": 1776,
+    "completion_tokens": 244,
+    "cost_usd": 0.0011427999999999998
+   }
+  },
+  "S05": {
+   "status": "done",
+   "scenario_hash": "31f4831cc9c350cd",
+   "result": {
+    "run_id": "eval-S05",
+    "status": "recommended",
+    "classification": "cnp_fraud",
+    "reporting_delay_working_days": 7,
+    "route": "provisional_credit",
+    "basis": "Under RBI Circular Table 2 (para 8), for third-party breaches where the time taken to report is within 4 to 7 working days, the customer's liability is limited to the transaction value or the amount mentioned in Table 1, whichever is lower.",
+    "liability_position": "The customer is liable for the transaction value or the amount mentioned in Table 1, whichever is lower, under RBI Table 2 for a reporting delay of 4 to 7 working days.",
+    "citations": [
+     {
+      "clause_id": "Table 2",
+      "doc_id": "rbi_circular_2017",
+      "quote": "Within 4 to 7 working days | The transaction value or the amount mentioned in Table 1, whichever is lower"
+     }
+    ],
+    "escalation": null,
+    "verification": {
+     "passed": true,
+     "attempts": 3,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.18433388322591782,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.377042219042778,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.1671668142080307,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "7(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.12791715562343597,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "6(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1496.1396246217191,
+      "prompt_tokens": 2804,
+      "completion_tokens": 28,
+      "cost_usd": 0.0009112,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 58.198874816298485,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "Table 2 customer liability zero liability fourth working day seventh working day"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2",
+        "sbi_policy_2021:compensation-policy:table-2",
+        "rbi_circular_2017:6",
+        "rbi_circular_2017:7(i)",
+        "sbi_policy_2021:compensation-policy:3(c)"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1607.4901670217514,
+      "prompt_tokens": 4331,
+      "completion_tokens": 30,
+      "cost_usd": 0.0013743,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 49.36949955299497,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "board approved policy SBI customer liability beyond 7 working days Table 1 limit"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2",
+        "sbi_policy_2021:compensation-policy:table-2",
+        "rbi_circular_2017:table-1",
+        "sbi_policy_2021:compensation-policy:table-1",
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 3199.587750248611,
+      "prompt_tokens": 6270,
+      "completion_tokens": 484,
+      "cost_usd": 0.0030909999999999996,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 2325.156374834478,
+      "prompt_tokens": 6851,
+      "completion_tokens": 478,
+      "cost_usd": 0.0032503000000000002,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": true,
+       "queries": [
+        "Table 2 customer liability zero liability fourth working day seventh working day",
+        "board approved policy SBI customer liability beyond 7 working days Table 1 limit"
+       ],
+       "strategy": null
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 20354.242958128452,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "retry",
+       "strategy_hint": "wider_k",
+       "unsupported_claims": [
+        "route decline contradicts the liability table for a third-party breach reported after 7 working days (RBI Table 2; SBI Table 2 beyond 7): expected provisional_credit"
+       ],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 1.2254170142114162,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 1.8909582868218422,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "board approved policy SBI customer liability beyond 7 working days Table 1 limit",
+        "k": 10,
+        "expand_refs": true
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2",
+        "sbi_policy_2021:compensation-policy:table-2",
+        "rbi_circular_2017:table-1",
+        "sbi_policy_2021:compensation-policy:table-1",
+        "rbi_circular_2017:7(i)",
+        "sbi_policy_2021:customer-rights-policy:p6",
+        "rbi_circular_2017:11#1",
+        "rbi_circular_2017:2",
+        "sbi_policy_2021:customer-grievances-redressal-policy:10#3",
+        "rbi_circular_2017:11#2",
+        "rbi_circular_2017:6",
+        "rbi_circular_2017:10",
+        "sbi_policy_2021:compensation-policy:4.6.2(a)",
+        "sbi_policy_2021:compensation-policy:4.6.2(b)(i)"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1882.9212081618607,
+      "prompt_tokens": 7160,
+      "completion_tokens": 516,
+      "cost_usd": 0.0034379999999999997,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1291.6219583712518,
+      "prompt_tokens": 8005,
+      "completion_tokens": 26,
+      "cost_usd": 0.0024665,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 40.52074998617172,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "beyond seven working days board approved policy bank liability customer liability"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:11#1",
+        "sbi_policy_2021:compensation-policy:table-2",
+        "rbi_circular_2017:10",
+        "rbi_circular_2017:7(i)",
+        "sbi_policy_2021:compensation-policy:4.6.2(a)"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 3035.3490002453327,
+      "prompt_tokens": 9658,
+      "completion_tokens": 516,
+      "cost_usd": 0.0041874,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": false,
+       "queries": [
+        "beyond seven working days board approved policy bank liability customer liability"
+       ],
+       "strategy": "wider_k"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 18736.87412496656,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "retry",
+       "strategy_hint": "neighbour_clause",
+       "unsupported_claims": [
+        "citation sbi_policy_2021 Table 2 does not resolve to retrieved text: 'Within 4 to 7 working days | The transaction value or the amount mentioned in Table 1, whichever is lower'"
+       ],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 1.3644578866660595,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.2659591846168041,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.14866702258586884,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "sbi_policy_2021",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "sbi_policy_2021:compensation-policy:table-2"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 9185.274625197053,
+      "prompt_tokens": 3691,
+      "completion_tokens": 26,
+      "cost_usd": 0.0011722999999999998,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 41.290124878287315,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "unauthorised electronic banking transaction third party breach board approved policy"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:11#1",
+        "rbi_circular_2017:4",
+        "rbi_circular_2017:5#2",
+        "sbi_policy_2021:compensation-policy:4.6.5",
+        "rbi_circular_2017:2"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 2807.87150003016,
+      "prompt_tokens": 4904,
+      "completion_tokens": 391,
+      "cost_usd": 0.0024487,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 2166.4193337783217,
+      "prompt_tokens": 5667,
+      "completion_tokens": 29,
+      "cost_usd": 0.0017726,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 48.365416936576366,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "Beyond 7 working days As per bank s Board approved policy Full liability"
+       },
+       "chunk_ids": [
+        "sbi_policy_2021:compensation-policy:table-2",
+        "rbi_circular_2017:table-2",
+        "sbi_policy_2021:compensation-policy:3(c)",
+        "rbi_circular_2017:10",
+        "sbi_policy_2021:compensation-policy:4.6.6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 5281.918417196721,
+      "prompt_tokens": 7461,
+      "completion_tokens": 391,
+      "cost_usd": 0.0032157999999999996,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": true,
+       "queries": [
+        "unauthorised electronic banking transaction third party breach board approved policy",
+        "Beyond 7 working days As per bank s Board approved policy Full liability"
+       ],
+       "strategy": "neighbour_clause"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 50035.26829183102,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "verification",
+      "latency_ms": 2447.0217498019338,
+      "prompt_tokens": 1313,
+      "completion_tokens": 307,
+      "cost_usd": 0.0011614,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "pass",
+       "strategy_hint": null,
+       "unsupported_claims": [],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 3174.113292247057,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.output",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "blocked": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "finalize",
+      "latency_ms": 0.27458323165774345,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": 0.3333333333333333,
+     "delay": true,
+     "outcome_correct": true
+    },
+    "groundedness": 1.0,
+    "faithfulness": 1.0,
+    "context_relevance": 0.41025641025641024,
+    "hallucinated": false,
+    "n_claims": 2,
+    "n_retrieved": 19,
+    "unresolved_citations": [],
+    "judged": true,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 1,
+    "prompt_tokens": 3585,
+    "completion_tokens": 839,
+    "cost_usd": 0.003173
+   }
+  },
+  "S06": {
+   "status": "done",
+   "scenario_hash": "cd4f931c90d0cdd3",
+   "result": {
+    "run_id": "eval-S06",
+    "status": "recommended",
+    "classification": "cnp_fraud",
+    "reporting_delay_working_days": 8,
+    "route": "decline",
+    "basis": "Under RBI Circular Table 2 and SBI Policy Table 2, when the reporting delay for a third-party breach exceeds 7 working days, customer liability is determined by the bank's Board-approved policy, which prescribes full liability for the customer.",
+    "liability_position": "The customer bears full liability for the transaction amount due to reporting beyond 7 working days.",
+    "citations": [
+     {
+      "clause_id": "Table 2",
+      "doc_id": "rbi_circular_2017",
+      "quote": "Beyond 7 working days | As per bank’s Board approved policy"
+     },
+     {
+      "clause_id": "Table 2",
+      "doc_id": "sbi_policy_2021",
+      "quote": "Beyond 7 working days | Full liability."
+     }
+    ],
+    "escalation": null,
+    "verification": {
+     "passed": true,
+     "attempts": 1,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.1882920041680336,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.3999159671366215,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.1670410856604576,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "7(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.11054100468754768,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "6(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 7820.126915816218,
+      "prompt_tokens": 2788,
+      "completion_tokens": 29,
+      "cost_usd": 0.0009088999999999999,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 41.2342082709074,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "Board approved policy third party breach zero liability limited liability 8 working days"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6",
+        "sbi_policy_2021:compensation-policy:4.6.2(a)",
+        "rbi_circular_2017:table-2",
+        "sbi_policy_2021:compensation-policy:table-2",
+        "rbi_circular_2017:10"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 8963.639000430703,
+      "prompt_tokens": 4411,
+      "completion_tokens": 29,
+      "cost_usd": 0.0013958,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 46.905375085771084,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "SBI Board approved policy beyond 7 working days full liability compensation policy"
+       },
+       "chunk_ids": [
+        "sbi_policy_2021:compensation-policy:1",
+        "sbi_policy_2021:compensation-policy:3(c)",
+        "sbi_policy_2021:compensation-policy:8",
+        "sbi_policy_2021:compensation-policy:7",
+        "sbi_policy_2021:compensation-policy:5"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 8025.147875305265,
+      "prompt_tokens": 5497,
+      "completion_tokens": 426,
+      "cost_usd": 0.0027140999999999997,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": true,
+       "queries": [
+        "Board approved policy third party breach zero liability limited liability 8 working days",
+        "SBI Board approved policy beyond 7 working days full liability compensation policy"
+       ],
+       "strategy": null
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 27660.48491606489,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "verification",
+      "latency_ms": 2236.2718749791384,
+      "prompt_tokens": 1629,
+      "completion_tokens": 284,
+      "cost_usd": 0.0011986999999999998,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "pass",
+       "strategy_hint": null,
+       "unsupported_claims": [],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 8248.116750270128,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.output",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "blocked": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "finalize",
+      "latency_ms": 0.23783370852470398,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": 1.0,
+     "delay": true,
+     "outcome_correct": true
+    },
+    "groundedness": 1.0,
+    "faithfulness": 1.0,
+    "context_relevance": 0.7,
+    "hallucinated": false,
+    "n_claims": 2,
+    "n_retrieved": 11,
+    "unresolved_citations": [],
+    "judged": true,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 1,
+    "prompt_tokens": 1963,
+    "completion_tokens": 245,
+    "cost_usd": 0.0012014
+   }
+  },
+  "S07": {
+   "status": "done",
+   "scenario_hash": "95482d4091436ae4",
+   "result": {
+    "run_id": "eval-S07",
+    "status": "escalated",
+    "classification": "skimming",
+    "reporting_delay_working_days": 12,
+    "route": null,
+    "basis": "The reporting delay is 12 working days from the transaction date. Because the communication date is unknown, Table 2 and RBI paragraph 5 govern whether fault lies with the bank for failing to send mandatory SMS alerts or with the customer for missing them.",
+    "liability_position": "Customer liability depends on whether the bank sent the mandatory SMS alert under RBI paragraph 5 and when the customer received communication, which determines the applicable row under Table 2.",
+    "citations": [
+     {
+      "clause_id": "5",
+      "doc_id": "rbi_circular_2017",
+      "quote": "Banks must ask their customers to mandatorily register for SMS alerts and wherever available register for e-mail alerts, for electronic banking transactions. The SMS alerts shall mandatorily be sent to the customers, while email alerts may be sent, wherever registered."
+     },
+     {
+      "clause_id": "Table 2",
+      "doc_id": "rbi_circular_2017",
+      "quote": "The number of working days mentioned in Table 2 shall be counted as per the working schedule of the home branch of the customer excluding the date of receiving the communication."
+     }
+    ],
+    "escalation": {
+     "reason_code": "contested_fault",
+     "competing_provisions": [
+      "rbi_circular_2017 5",
+      "rbi_circular_2017 Table 2"
+     ],
+     "note": "The analyst must determine whether the bank sent the mandatory SMS alert and whether the customer received communication, as the communication date is unknown and the reporting delay is counted from the date of receiving the communication under Table 2."
+    },
+    "verification": {
+     "passed": true,
+     "attempts": 3,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.07708324119448662,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.15924964100122452,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.1677088439464569,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "7(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.041082967072725296,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "6(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 3158.4994168952107,
+      "prompt_tokens": 2786,
+      "completion_tokens": 24,
+      "cost_usd": 0.0008958,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 126.80983263999224,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "skimming card present liability Board approved policy"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:11#1",
+        "rbi_circular_2017:10",
+        "rbi_circular_2017:11#2",
+        "rbi_circular_2017:2",
+        "rbi_circular_2017:p8#2"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 2661.6671248339117,
+      "prompt_tokens": 4052,
+      "completion_tokens": 27,
+      "cost_usd": 0.0012830999999999997,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 51.77666572853923,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "SBI policy card present skimming Board approved policy 4.6"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:11#2",
+        "sbi_policy_2021:customer-grievances-redressal-policy:10#4",
+        "sbi_policy_2021:compensation-policy:4.5.1",
+        "rbi_circular_2017:11#1",
+        "sbi_policy_2021:customer-grievances-redressal-policy:4(i)"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 2264.2032499425113,
+      "prompt_tokens": 5197,
+      "completion_tokens": 28,
+      "cost_usd": 0.0016291,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 56.00391607731581,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "Table 2 beyond 7 working days Board approved policy SBI liability"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2",
+        "sbi_policy_2021:compensation-policy:table-2",
+        "sbi_policy_2021:compensation-policy:table-1",
+        "rbi_circular_2017:table-1",
+        "rbi_circular_2017:11#2"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 2712.713333312422,
+      "prompt_tokens": 6966,
+      "completion_tokens": 424,
+      "cost_usd": 0.0031498,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": true,
+       "queries": [
+        "skimming card present liability Board approved policy",
+        "SBI policy card present skimming Board approved policy 4.6",
+        "Table 2 beyond 7 working days Board approved policy SBI liability"
+       ],
+       "strategy": null
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 20728.64087484777,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "retry",
+       "strategy_hint": "wider_k",
+       "unsupported_claims": [
+        "the date the customer received the bank's communication is unknown, so the RBI Table 2 row cannot be applied (it counts from receipt) and fault is unsettled (RBI para 5: mandatory SMS alerts): escalate with reason_code contested_fault instead of route decline"
+       ],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 0.548667274415493,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 1.718249637633562,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "Table 2 beyond 7 working days Board approved policy SBI liability",
+        "k": 10,
+        "expand_refs": true
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2",
+        "sbi_policy_2021:compensation-policy:table-2",
+        "sbi_policy_2021:compensation-policy:table-1",
+        "rbi_circular_2017:table-1",
+        "rbi_circular_2017:11#2",
+        "rbi_circular_2017:7(i)",
+        "sbi_policy_2021:compensation-policy:4.1(c)",
+        "sbi_policy_2021:compensation-policy:3(c)",
+        "sbi_policy_2021:customer-rights-policy:p6",
+        "rbi_circular_2017:11#1",
+        "rbi_circular_2017:6",
+        "rbi_circular_2017:10",
+        "sbi_policy_2021:compensation-policy:4.6.2(a)",
+        "sbi_policy_2021:compensation-policy:4.6.2(b)(i)"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 2979.5762500725687,
+      "prompt_tokens": 7080,
+      "completion_tokens": 548,
+      "cost_usd": 0.0034939999999999997,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1663.1459998898208,
+      "prompt_tokens": 8018,
+      "completion_tokens": 42,
+      "cost_usd": 0.0025104,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 81.38495916500688,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "expand_refs": true,
+        "k": 10,
+        "query": "unauthorised electronic banking transaction customer liability Board approved policy third party breach communications SMS alert"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:5#1",
+        "sbi_policy_2021:customer-grievances-redressal-policy:4(iv)#1",
+        "sbi_policy_2021:compensation-policy:4.6.1(a)",
+        "rbi_circular_2017:5#2",
+        "sbi_policy_2021:customer-grievances-redressal-policy:4(iii)",
+        "sbi_policy_2021:customer-grievances-redressal-policy:4(iv)#3",
+        "rbi_circular_2017:11#1",
+        "sbi_policy_2021:customer-grievances-redressal-policy:4(iv)#2",
+        "rbi_circular_2017:4",
+        "rbi_circular_2017:5#3",
+        "rbi_circular_2017:10"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 3156.72850003466,
+      "prompt_tokens": 10902,
+      "completion_tokens": 548,
+      "cost_usd": 0.004640599999999999,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": false,
+       "queries": [
+        "unauthorised electronic banking transaction customer liability Board approved policy third party breach communications SMS alert"
+       ],
+       "strategy": "wider_k"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 18452.45304191485,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "retry",
+       "strategy_hint": "wider_k",
+       "unsupported_claims": [
+        "an escalation for conflicting provisions / contested fault must cite both provisions"
+       ],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 0.8362913504242897,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1309.9156669341028,
+      "prompt_tokens": 2849,
+      "completion_tokens": 23,
+      "cost_usd": 0.0009122,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 69.0010841935873,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "card terminal skimming Board approved policy reporting delay"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:11#2",
+        "sbi_policy_2021:customer-rights-policy:5(i)~2",
+        "sbi_policy_2021:customer-grievances-redressal-policy:2#2",
+        "sbi_policy_2021:customer-grievances-redressal-policy:4(iv)#3",
+        "rbi_circular_2017:p8#1"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1327.0527920685709,
+      "prompt_tokens": 4304,
+      "completion_tokens": 23,
+      "cost_usd": 0.0013487,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 54.589999839663506,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "Table 2 communication date SMS alert received"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:5#1",
+        "sbi_policy_2021:compensation-policy:4.6.1(a)",
+        "rbi_circular_2017:table-2",
+        "sbi_policy_2021:customer-grievances-redressal-policy:4(iv)#3",
+        "rbi_circular_2017:5#3"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 2783.0972908996046,
+      "prompt_tokens": 5548,
+      "completion_tokens": 614,
+      "cost_usd": 0.0031994,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": true,
+       "queries": [
+        "card terminal skimming Board approved policy reporting delay",
+        "Table 2 communication date SMS alert received"
+       ],
+       "strategy": "rewrite_query"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 17638.551624957472,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "verification",
+      "latency_ms": 6888.028457760811,
+      "prompt_tokens": 1852,
+      "completion_tokens": 343,
+      "cost_usd": 0.0014131,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "pass",
+       "strategy_hint": null,
+       "unsupported_claims": [],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 10107.909999787807,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.output",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "blocked": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "finalize",
+      "latency_ms": 0.36420905962586403,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": 1.0,
+     "delay": true,
+     "outcome_correct": true
+    },
+    "groundedness": 0.3333333333333333,
+    "faithfulness": 0.3333333333333333,
+    "context_relevance": 0.56,
+    "hallucinated": true,
+    "n_claims": 3,
+    "n_retrieved": 31,
+    "unresolved_citations": [],
+    "judged": true,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 1,
+    "prompt_tokens": 5356,
+    "completion_tokens": 1067,
+    "cost_usd": 0.0042743
+   }
+  },
+  "S08": {
+   "status": "done",
+   "scenario_hash": "5dfcf42b92b67f25",
+   "result": {
+    "run_id": "eval-S08",
+    "status": "escalated",
+    "classification": "cnp_fraud",
+    "reporting_delay_working_days": 1,
+    "route": null,
+    "basis": "RBI para 7(i): \"(i) In cases where the loss is due to negligence by a customer, such as where he has shared the payment credentials, the customer will bear the entire loss until he reports the unauthorised transaction to the bank\". RBI Table 2, row for a report after 1 working days: \"Within 3 working days | Zero liability\".",
+    "liability_position": "",
+    "citations": [
+     {
+      "clause_id": "7(i)",
+      "doc_id": "rbi_circular_2017",
+      "quote": "(i) In cases where the loss is due to negligence by a customer, such as where he has shared the payment credentials, the customer will bear the entire loss until he reports the unauthorised transaction to the bank"
+     },
+     {
+      "clause_id": "Table 2",
+      "doc_id": "rbi_circular_2017",
+      "quote": "Within 3 working days | Zero liability"
+     }
+    ],
+    "escalation": {
+     "reason_code": "conflicting_provisions",
+     "competing_provisions": [
+      "rbi_circular_2017 7(i)",
+      "rbi_circular_2017 Table 2"
+     ],
+     "note": "Whether the customer's conduct is negligence (para 7(i)) or a third-party breach governed by the Table 2 row for this delay is not settled by the circular; an analyst must decide."
+    },
+    "verification": {
+     "passed": true,
+     "attempts": 1,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.30912458896636963,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.6515830755233765,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.22579217329621315,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "7(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.11845910921692848,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "6(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1549.166041892022,
+      "prompt_tokens": 2792,
+      "completion_tokens": 26,
+      "cost_usd": 0.0009025999999999998,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 64.48154198005795,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "negligence customer shared payment credentials zero liability table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6",
+        "sbi_policy_2021:compensation-policy:4.6.2(a)",
+        "sbi_policy_2021:compensation-policy:4.6.2(b)(i)",
+        "rbi_circular_2017:7(i)",
+        "sbi_policy_2021:compensation-policy:4.6.3"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 5642.329375259578,
+      "prompt_tokens": 4243,
+      "completion_tokens": 27,
+      "cost_usd": 0.0013403999999999998,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 40.588625241070986,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "Table 2 zero liability customer negligence sharing payment credentials conflicting provisions"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6",
+        "sbi_policy_2021:compensation-policy:4.6.3",
+        "sbi_policy_2021:compensation-policy:4.6.2(a)",
+        "sbi_policy_2021:compensation-policy:4.6.2(b)(i)",
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 5697.350958827883,
+      "prompt_tokens": 5695,
+      "completion_tokens": 518,
+      "cost_usd": 0.0030034999999999997,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.conflict_rule",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "model_route": null,
+       "model_citations": [
+        "rbi_circular_2017 Table 2",
+        "rbi_circular_2017 7(i)"
+       ],
+       "code_written_basis": "RBI para 7(i): \"(i) In cases where the loss is due to negligence by a customer, such as where he has shared the payment credentials, the customer will bear the entire loss until he reports the unauthorised transaction to the bank\". RBI Table 2, row for a report after 1 working days: \"Within 3 working days | Zero liability\"."
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": true,
+       "queries": [
+        "negligence customer shared payment credentials zero liability table 2",
+        "Table 2 zero liability customer negligence sharing payment credentials conflicting provisions"
+       ],
+       "strategy": null
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 17709.294375032187,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "verification",
+      "latency_ms": 4853.772916831076,
+      "prompt_tokens": 1541,
+      "completion_tokens": 220,
+      "cost_usd": 0.0010123,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "pass",
+       "strategy_hint": null,
+       "unsupported_claims": [],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 5156.388207804412,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.output",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "blocked": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "finalize",
+      "latency_ms": 0.31233299523591995,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": 1.0,
+     "delay": true,
+     "outcome_correct": true
+    },
+    "groundedness": null,
+    "faithfulness": null,
+    "context_relevance": 0.7,
+    "hallucinated": false,
+    "n_claims": 0,
+    "n_retrieved": 6,
+    "unresolved_citations": [],
+    "judged": true,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 1,
+    "prompt_tokens": 1160,
+    "completion_tokens": 234,
+    "cost_usd": 0.0009329999999999999
+   }
+  },
+  "S09": {
+   "status": "done",
+   "scenario_hash": "e20aac0f171c74ef",
+   "result": {
+    "run_id": "eval-S09",
+    "status": "escalated",
+    "classification": "upi_social_eng",
+    "reporting_delay_working_days": 2,
+    "route": null,
+    "basis": "RBI para 7(i): \"(i) In cases where the loss is due to negligence by a customer, such as where he has shared the payment credentials, the customer will bear the entire loss until he reports the unauthorised transaction to the bank\". RBI Table 2, row for a report after 2 working days: \"Within 3 working days | Zero liability\".",
+    "liability_position": "",
+    "citations": [
+     {
+      "clause_id": "7(i)",
+      "doc_id": "rbi_circular_2017",
+      "quote": "(i) In cases where the loss is due to negligence by a customer, such as where he has shared the payment credentials, the customer will bear the entire loss until he reports the unauthorised transaction to the bank"
+     },
+     {
+      "clause_id": "Table 2",
+      "doc_id": "rbi_circular_2017",
+      "quote": "Within 3 working days | Zero liability"
+     }
+    ],
+    "escalation": {
+     "reason_code": "conflicting_provisions",
+     "competing_provisions": [
+      "rbi_circular_2017 7(i)",
+      "rbi_circular_2017 Table 2"
+     ],
+     "note": "Whether the customer's conduct is negligence (para 7(i)) or a third-party breach governed by the Table 2 row for this delay is not settled by the circular; an analyst must decide."
+    },
+    "verification": {
+     "passed": true,
+     "attempts": 1,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.14345906674861908,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.28612464666366577,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.12962473556399345,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "7(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.08641695603728294,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "6(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1510.3163751773536,
+      "prompt_tokens": 2750,
+      "completion_tokens": 24,
+      "cost_usd": 0.000885,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 62.858750112354755,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "shared payment credentials negligence customer liability rbi circular"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6",
+        "sbi_policy_2021:customer-grievances-redressal-policy:1~2",
+        "sbi_policy_2021:customer-grievances-redressal-policy:3~2",
+        "sbi_policy_2021:compensation-policy:4.6.2(a)",
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1239.7889997810125,
+      "prompt_tokens": 3847,
+      "completion_tokens": 25,
+      "cost_usd": 0.0012166,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 52.692292258143425,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "UPI social engineering customer liability negligence sharing credentials rbi"
+       },
+       "chunk_ids": [
+        "rbi_ios_2026:1~2",
+        "rbi_circular_2017:6",
+        "rbi_circular_2017:11#1",
+        "sbi_policy_2021:compensation-policy:4.6.2(a)",
+        "rbi_ios_2026:3"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 6195.185666903853,
+      "prompt_tokens": 4992,
+      "completion_tokens": 596,
+      "cost_usd": 0.0029875999999999995,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.conflict_rule",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "model_route": null,
+       "model_citations": [
+        "rbi_circular_2017 Table 2",
+        "rbi_circular_2017 7(i)"
+       ],
+       "code_written_basis": "RBI para 7(i): \"(i) In cases where the loss is due to negligence by a customer, such as where he has shared the payment credentials, the customer will bear the entire loss until he reports the unauthorised transaction to the bank\". RBI Table 2, row for a report after 2 working days: \"Within 3 working days | Zero liability\"."
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": true,
+       "queries": [
+        "shared payment credentials negligence customer liability rbi circular",
+        "UPI social engineering customer liability negligence sharing credentials rbi"
+       ],
+       "strategy": null
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 25365.303000435233,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "verification",
+      "latency_ms": 1979.682084172964,
+      "prompt_tokens": 1548,
+      "completion_tokens": 306,
+      "cost_usd": 0.0012294,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "pass",
+       "strategy_hint": null,
+       "unsupported_claims": [],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 1981.3606250099838,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.output",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "blocked": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "finalize",
+      "latency_ms": 0.24091685190796852,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": 1.0,
+     "delay": true,
+     "outcome_correct": true
+    },
+    "groundedness": null,
+    "faithfulness": null,
+    "context_relevance": 0.35,
+    "hallucinated": false,
+    "n_claims": 0,
+    "n_retrieved": 9,
+    "unresolved_citations": [],
+    "judged": true,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 1,
+    "prompt_tokens": 1282,
+    "completion_tokens": 208,
+    "cost_usd": 0.0009046
+   }
+  },
+  "S10": {
+   "status": "done",
+   "scenario_hash": "55e068db2b6e591d",
+   "result": {
+    "run_id": "eval-S10",
+    "status": "escalated",
+    "classification": "cnp_fraud",
+    "reporting_delay_working_days": 6,
+    "route": null,
+    "basis": "RBI para 7(i): \"(i) In cases where the loss is due to negligence by a customer, such as where he has shared the payment credentials, the customer will bear the entire loss until he reports the unauthorised transaction to the bank\". RBI Table 2, row for a report after 6 working days: \"Within 4 to 7 working days | The transaction value or the amount mentioned in Table 1, whichever is lower\".",
+    "liability_position": "",
+    "citations": [
+     {
+      "clause_id": "7(i)",
+      "doc_id": "rbi_circular_2017",
+      "quote": "(i) In cases where the loss is due to negligence by a customer, such as where he has shared the payment credentials, the customer will bear the entire loss until he reports the unauthorised transaction to the bank"
+     },
+     {
+      "clause_id": "Table 2",
+      "doc_id": "rbi_circular_2017",
+      "quote": "Within 4 to 7 working days | The transaction value or the amount mentioned in Table 1, whichever is lower"
+     }
+    ],
+    "escalation": {
+     "reason_code": "conflicting_provisions",
+     "competing_provisions": [
+      "rbi_circular_2017 7(i)",
+      "rbi_circular_2017 Table 2"
+     ],
+     "note": "Whether the customer's conduct is negligence (para 7(i)) or a third-party breach governed by the Table 2 row for this delay is not settled by the circular; an analyst must decide."
+    },
+    "verification": {
+     "passed": true,
+     "attempts": 1,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.15783263370394707,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.44075027108192444,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.14474987983703613,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "7(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.11104205623269081,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "6(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 7283.304125070572,
+      "prompt_tokens": 2805,
+      "completion_tokens": 28,
+      "cost_usd": 0.0009115,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 56.95245834067464,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "unauthorised electronic banking transactions customer liability sharing payment credentials board approved policy"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:11#1",
+        "sbi_policy_2021:compensation-policy:4.6.5",
+        "rbi_circular_2017:2",
+        "sbi_policy_2021:compensation-policy:4.6.3",
+        "sbi_policy_2021:compensation-policy:4.6.1(b)"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1682.8042496927083,
+      "prompt_tokens": 4098,
+      "completion_tokens": 27,
+      "cost_usd": 0.0012969,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 56.933708023279905,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "negligence customer sharing payment credentials rbi circular table 2"
+       },
+       "chunk_ids": [
+        "sbi_policy_2021:customer-grievances-redressal-policy:3~2",
+        "sbi_policy_2021:customer-grievances-redressal-policy:1~2",
+        "sbi_policy_2021:compensation-policy:table-2",
+        "rbi_circular_2017:table-2",
+        "sbi_policy_2021:compensation-policy:1"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 3356.987999752164,
+      "prompt_tokens": 5376,
+      "completion_tokens": 586,
+      "cost_usd": 0.0030778,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.conflict_rule",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "model_route": null,
+       "model_citations": [
+        "rbi_circular_2017 7(i)",
+        "rbi_circular_2017 Table 2"
+       ],
+       "code_written_basis": "RBI para 7(i): \"(i) In cases where the loss is due to negligence by a customer, such as where he has shared the payment credentials, the customer will bear the entire loss until he reports the unauthorised transaction to the bank\". RBI Table 2, row for a report after 6 working days: \"Within 4 to 7 working days | The transaction value or the amount mentioned in Table 1, whichever is lower\"."
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": true,
+       "queries": [
+        "unauthorised electronic banking transactions customer liability sharing payment credentials board approved policy",
+        "negligence customer sharing payment credentials rbi circular table 2"
+       ],
+       "strategy": null
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 19864.559875335544,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "verification",
+      "latency_ms": 1958.8215830735862,
+      "prompt_tokens": 1569,
+      "completion_tokens": 296,
+      "cost_usd": 0.0012106999999999999,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "pass",
+       "strategy_hint": null,
+       "unsupported_claims": [],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 4605.1979581825435,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.output",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "blocked": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "finalize",
+      "latency_ms": 0.16958313062787056,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": 1.0,
+     "delay": true,
+     "outcome_correct": true
+    },
+    "groundedness": null,
+    "faithfulness": null,
+    "context_relevance": 0.4,
+    "hallucinated": false,
+    "n_claims": 0,
+    "n_retrieved": 12,
+    "unresolved_citations": [],
+    "judged": true,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 1,
+    "prompt_tokens": 1735,
+    "completion_tokens": 237,
+    "cost_usd": 0.001113
+   }
+  },
+  "S11": {
+   "status": "done",
+   "scenario_hash": "62a861b1f467ee6a",
+   "result": {
+    "run_id": "eval-S11",
+    "status": "escalated",
+    "classification": "cnp_fraud",
+    "reporting_delay_working_days": 17,
+    "route": null,
+    "basis": "RBI para 7(i): \"(i) In cases where the loss is due to negligence by a customer, such as where he has shared the payment credentials, the customer will bear the entire loss until he reports the unauthorised transaction to the bank\". RBI Table 2, row for a report after 17 working days: \"Beyond 7 working days | As per bank’s Board approved policy\".",
+    "liability_position": "",
+    "citations": [
+     {
+      "clause_id": "7(i)",
+      "doc_id": "rbi_circular_2017",
+      "quote": "(i) In cases where the loss is due to negligence by a customer, such as where he has shared the payment credentials, the customer will bear the entire loss until he reports the unauthorised transaction to the bank"
+     },
+     {
+      "clause_id": "Table 2",
+      "doc_id": "rbi_circular_2017",
+      "quote": "Beyond 7 working days | As per bank’s Board approved policy"
+     }
+    ],
+    "escalation": {
+     "reason_code": "conflicting_provisions",
+     "competing_provisions": [
+      "rbi_circular_2017 7(i)",
+      "rbi_circular_2017 Table 2"
+     ],
+     "note": "Whether the customer's conduct is negligence (para 7(i)) or a third-party breach governed by the Table 2 row for this delay is not settled by the circular; an analyst must decide."
+    },
+    "verification": {
+     "passed": true,
+     "attempts": 1,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.30570896342396736,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.4303338937461376,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.10816613212227821,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "7(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.08487468585371971,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "6(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1162.3898330144584,
+      "prompt_tokens": 2802,
+      "completion_tokens": 53,
+      "cost_usd": 0.0009730999999999999,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 62.47999984771013,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "customer liability Board approved policy SBI policy unauthorized electronic banking transactions"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:11#1",
+        "sbi_policy_2021:customer-grievances-redressal-policy:4(iv)#1",
+        "rbi_circular_2017:2",
+        "sbi_policy_2021:compensation-policy:4.6.1(c)",
+        "sbi_policy_2021:compensation-policy:4.6.5"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 10.777499992400408,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "Board approved policy zero liability limited liability customer negligence sharing payment credentials"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6",
+        "rbi_circular_2017:11#1",
+        "sbi_policy_2021:compensation-policy:4.6.2(a)",
+        "sbi_policy_2021:compensation-policy:4.6.5",
+        "sbi_policy_2021:compensation-policy:4.6.3"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 5146.788582671434,
+      "prompt_tokens": 5369,
+      "completion_tokens": 73,
+      "cost_usd": 0.0017931999999999998,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.44562527909874916,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "clause_id": "7(i)",
+        "doc_id": "rbi_circular_2017"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.19241636618971825,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "clause_id": "Table 2",
+        "doc_id": "rbi_circular_2017"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 5588.904166128486,
+      "prompt_tokens": 6088,
+      "completion_tokens": 617,
+      "cost_usd": 0.0033689,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.conflict_rule",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "model_route": null,
+       "model_citations": [
+        "rbi_circular_2017 7(i)",
+        "rbi_circular_2017 Table 2"
+       ],
+       "code_written_basis": "RBI para 7(i): \"(i) In cases where the loss is due to negligence by a customer, such as where he has shared the payment credentials, the customer will bear the entire loss until he reports the unauthorised transaction to the bank\". RBI Table 2, row for a report after 17 working days: \"Beyond 7 working days | As per bank’s Board approved policy\"."
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": true,
+       "queries": [
+        "customer liability Board approved policy SBI policy unauthorized electronic banking transactions",
+        "Board approved policy zero liability limited liability customer negligence sharing payment credentials"
+       ],
+       "strategy": null
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 18678.102624602616,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "verification",
+      "latency_ms": 5398.901999928057,
+      "prompt_tokens": 1610,
+      "completion_tokens": 257,
+      "cost_usd": 0.0011255,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "pass",
+       "strategy_hint": null,
+       "unsupported_claims": [],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 5809.467000421137,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.output",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "blocked": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "finalize",
+      "latency_ms": 0.3137909807264805,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": 1.0,
+     "delay": true,
+     "outcome_correct": true
+    },
+    "groundedness": null,
+    "faithfulness": null,
+    "context_relevance": 0.75,
+    "hallucinated": false,
+    "n_claims": 0,
+    "n_retrieved": 10,
+    "unresolved_citations": [],
+    "judged": true,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 1,
+    "prompt_tokens": 1643,
+    "completion_tokens": 209,
+    "cost_usd": 0.0010153999999999999
+   }
+  },
+  "S12": {
+   "status": "done",
+   "scenario_hash": "dd81a910e704da0c",
+   "result": {
+    "run_id": "eval-S12",
+    "status": "escalated",
+    "classification": "cnp_fraud",
+    "reporting_delay_working_days": 0,
+    "route": null,
+    "basis": "RBI para 7(i): \"(i) In cases where the loss is due to negligence by a customer, such as where he has shared the payment credentials, the customer will bear the entire loss until he reports the unauthorised transaction to the bank\". RBI Table 2, row for a report after 0 working days: \"Within 3 working days | Zero liability\".",
+    "liability_position": "",
+    "citations": [
+     {
+      "clause_id": "7(i)",
+      "doc_id": "rbi_circular_2017",
+      "quote": "(i) In cases where the loss is due to negligence by a customer, such as where he has shared the payment credentials, the customer will bear the entire loss until he reports the unauthorised transaction to the bank"
+     },
+     {
+      "clause_id": "Table 2",
+      "doc_id": "rbi_circular_2017",
+      "quote": "Within 3 working days | Zero liability"
+     }
+    ],
+    "escalation": {
+     "reason_code": "conflicting_provisions",
+     "competing_provisions": [
+      "rbi_circular_2017 7(i)",
+      "rbi_circular_2017 Table 2"
+     ],
+     "note": "Whether the customer's conduct is negligence (para 7(i)) or a third-party breach governed by the Table 2 row for this delay is not settled by the circular; an analyst must decide."
+    },
+    "verification": {
+     "passed": true,
+     "attempts": 1,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.2675838768482208,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.41850004345178604,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.18033385276794434,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "7(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.11995760723948479,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "6(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1715.7313325442374,
+      "prompt_tokens": 2788,
+      "completion_tokens": 24,
+      "cost_usd": 0.0008963999999999999,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 69.0727080218494,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "customer liability sharing payment credentials board approved policy negligence"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:11#1",
+        "sbi_policy_2021:compensation-policy:4.6.2(a)",
+        "rbi_circular_2017:6",
+        "sbi_policy_2021:compensation-policy:4.6.5",
+        "sbi_policy_2021:compensation-policy:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 4366.494209039956,
+      "prompt_tokens": 4030,
+      "completion_tokens": 31,
+      "cost_usd": 0.0012864999999999997,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 67.38641625270247,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "negligence customer share payment credentials entire loss rbi circular 7(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)",
+        "sbi_policy_2021:compensation-policy:table-2",
+        "sbi_policy_2021:compensation-policy:4.6.2(b)(i)",
+        "rbi_circular_2017:p8#2",
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 2851.3357918709517,
+      "prompt_tokens": 5671,
+      "completion_tokens": 524,
+      "cost_usd": 0.0030112999999999997,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.conflict_rule",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "model_route": null,
+       "model_citations": [
+        "rbi_circular_2017 7(i)",
+        "rbi_circular_2017 Table 2"
+       ],
+       "code_written_basis": "RBI para 7(i): \"(i) In cases where the loss is due to negligence by a customer, such as where he has shared the payment credentials, the customer will bear the entire loss until he reports the unauthorised transaction to the bank\". RBI Table 2, row for a report after 0 working days: \"Within 3 working days | Zero liability\"."
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": true,
+       "queries": [
+        "customer liability sharing payment credentials board approved policy negligence",
+        "negligence customer share payment credentials entire loss rbi circular 7(i)"
+       ],
+       "strategy": null
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 17029.89491727203,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "verification",
+      "latency_ms": 1621.343791950494,
+      "prompt_tokens": 1535,
+      "completion_tokens": 282,
+      "cost_usd": 0.0011655,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "pass",
+       "strategy_hint": null,
+       "unsupported_claims": [],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 4771.774834021926,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.output",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "blocked": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "finalize",
+      "latency_ms": 0.14291703701019287,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": 1.0,
+     "delay": true,
+     "outcome_correct": true
+    },
+    "groundedness": null,
+    "faithfulness": null,
+    "context_relevance": 0.45,
+    "hallucinated": false,
+    "n_claims": 0,
+    "n_retrieved": 10,
+    "unresolved_citations": [],
+    "judged": true,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 1,
+    "prompt_tokens": 1826,
+    "completion_tokens": 221,
+    "cost_usd": 0.0011002999999999998
+   }
+  },
+  "S13": {
+   "status": "done",
+   "scenario_hash": "5994f20b6c8d1900",
+   "result": {
+    "run_id": "eval-S13",
+    "status": "recommended",
+    "classification": "cnp_fraud",
+    "reporting_delay_working_days": 17,
+    "route": "decline",
+    "basis": "SBI Table 2 stipulates that when the delay in reporting an unauthorised electronic banking transaction is beyond 7 working days, the customer's liability shall be full.",
+    "liability_position": "The customer bears full liability for the transaction amount of ₹48,000 because the reporting delay of 17 working days exceeded 7 working days.",
+    "citations": [
+     {
+      "clause_id": "Table 2",
+      "doc_id": "sbi_policy_2021",
+      "quote": "Beyond 7 working days | Full liability."
+     }
+    ],
+    "escalation": null,
+    "verification": {
+     "passed": true,
+     "attempts": 2,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.28391601517796516,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.4063327796757221,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.2432498149573803,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "7(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.2519995905458927,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "6(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1799.2222923785448,
+      "prompt_tokens": 2796,
+      "completion_tokens": 25,
+      "cost_usd": 0.0009012999999999998,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 76.80641720071435,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "Board approved policy third party breach zero liability limited liability"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6",
+        "sbi_policy_2021:compensation-policy:4.6.2(a)",
+        "rbi_circular_2017:11#1",
+        "sbi_policy_2021:compensation-policy:4.6.3",
+        "rbi_circular_2017:10"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 5114.478791132569,
+      "prompt_tokens": 4211,
+      "completion_tokens": 36,
+      "cost_usd": 0.0013533,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.572041142731905,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "sbi_policy_2021",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "sbi_policy_2021:compensation-policy:table-2"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 3105.198792181909,
+      "prompt_tokens": 4720,
+      "completion_tokens": 509,
+      "cost_usd": 0.0026885,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 4209.009666927159,
+      "prompt_tokens": 5471,
+      "completion_tokens": 31,
+      "cost_usd": 0.0017187999999999997,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 52.57270811125636,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "Further if the delay in reporting is beyond seven working days customer liability shall be full"
+       },
+       "chunk_ids": [
+        "sbi_policy_2021:compensation-policy:table-2",
+        "rbi_circular_2017:table-2",
+        "sbi_policy_2021:customer-grievances-redressal-policy:p16",
+        "sbi_policy_2021:customer-rights-policy:5(i)~2",
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 9018.52345885709,
+      "prompt_tokens": 7304,
+      "completion_tokens": 509,
+      "cost_usd": 0.0034636999999999997,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": true,
+       "queries": [
+        "Board approved policy third party breach zero liability limited liability",
+        "Further if the delay in reporting is beyond seven working days customer liability shall be full"
+       ],
+       "strategy": null
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 35734.86416693777,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "verification",
+      "latency_ms": 2539.8717913776636,
+      "prompt_tokens": 1668,
+      "completion_tokens": 354,
+      "cost_usd": 0.0013854,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "retry",
+       "strategy_hint": "rewrite_query",
+       "unsupported_claims": [
+        "unsupported by the cited passages: Beyond 7 working days from the date of receiving the communication, the customer's liability is full according to Table 2."
+       ],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 2541.052083019167,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 4226.868916302919,
+      "prompt_tokens": 2879,
+      "completion_tokens": 25,
+      "cost_usd": 0.0009262,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 55.11300032958388,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "Board approved policy customer liability fourth column Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:11#2",
+        "rbi_circular_2017:11#1",
+        "sbi_policy_2021:compensation-policy:4.6.3",
+        "rbi_circular_2017:6",
+        "rbi_circular_2017:2"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 5464.110583998263,
+      "prompt_tokens": 4023,
+      "completion_tokens": 25,
+      "cost_usd": 0.0012694,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 52.1415825933218,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "Table 2 zero liability third party breach SBI policy"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6",
+        "sbi_policy_2021:compensation-policy:table-1",
+        "sbi_policy_2021:compensation-policy:4.6.2(a)",
+        "sbi_policy_2021:compensation-policy:4.6.3",
+        "rbi_circular_2017:table-1"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 3641.813207883388,
+      "prompt_tokens": 5670,
+      "completion_tokens": 31,
+      "cost_usd": 0.0017784999999999997,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 55.004207883030176,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "Table 2 rbi circular 2017 beyond 7 working days"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2",
+        "rbi_circular_2017:p1",
+        "sbi_policy_2021:compensation-policy:3",
+        "sbi_policy_2021:compensation-policy:table-2",
+        "sbi_policy_2021:compensation-policy:4.12.1#2"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 4496.244083158672,
+      "prompt_tokens": 7212,
+      "completion_tokens": 386,
+      "cost_usd": 0.0031285999999999996,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": true,
+       "queries": [
+        "Board approved policy customer liability fourth column Table 2",
+        "Table 2 zero liability third party breach SBI policy",
+        "Table 2 rbi circular 2017 beyond 7 working days"
+       ],
+       "strategy": "rewrite_query"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 34629.354833159596,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "verification",
+      "latency_ms": 4942.624125164002,
+      "prompt_tokens": 1423,
+      "completion_tokens": 355,
+      "cost_usd": 0.0013144,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "pass",
+       "strategy_hint": null,
+       "unsupported_claims": [],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 6450.142415706068,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.output",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "blocked": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "finalize",
+      "latency_ms": 0.24916604161262512,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": 0.5,
+     "delay": true,
+     "outcome_correct": true
+    },
+    "groundedness": 1.0,
+    "faithfulness": 1.0,
+    "context_relevance": 0.46,
+    "hallucinated": false,
+    "n_claims": 2,
+    "n_retrieved": 17,
+    "unresolved_citations": [],
+    "judged": true,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 1,
+    "prompt_tokens": 3206,
+    "completion_tokens": 599,
+    "cost_usd": 0.0024592999999999998
+   }
+  },
+  "S14": {
+   "status": "done",
+   "scenario_hash": "795245ceb7ab7a43",
+   "result": {
+    "run_id": "eval-S14",
+    "status": "escalated",
+    "classification": null,
+    "reporting_delay_working_days": 1,
+    "route": null,
+    "basis": "",
+    "liability_position": "",
+    "citations": [],
+    "escalation": {
+     "reason_code": "out_of_corpus",
+     "competing_provisions": [],
+     "note": "Not an unauthorised electronic banking transaction covered by the corpus (e.g. a payment the customer made themselves). An analyst must handle it."
+    },
+    "verification": {
+     "passed": true,
+     "attempts": 1,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.1917090266942978,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.43895887210965157,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.2042907290160656,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "7(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.12845918536186218,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "6(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 7288.478958886117,
+      "prompt_tokens": 2773,
+      "completion_tokens": 144,
+      "cost_usd": 0.0011918999999999999,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": false,
+       "queries": [],
+       "strategy": null
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 9667.316375300288,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "pass",
+       "strategy_hint": null,
+       "unsupported_claims": [],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 0.11625001206994057,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.output",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "blocked": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "finalize",
+      "latency_ms": 0.16075000166893005,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": null,
+     "delay": true,
+     "outcome_correct": true
+    },
+    "groundedness": null,
+    "faithfulness": null,
+    "context_relevance": null,
+    "hallucinated": false,
+    "n_claims": 0,
+    "n_retrieved": 3,
+    "unresolved_citations": [],
+    "judged": false,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "cost_usd": 0
+   }
+  },
+  "S15": {
+   "status": "done",
+   "scenario_hash": "07604b1a99f4a0c3",
+   "result": {
+    "run_id": "eval-S15",
+    "status": "escalated",
+    "classification": null,
+    "reporting_delay_working_days": 1,
+    "route": null,
+    "basis": "",
+    "liability_position": "",
+    "citations": [],
+    "escalation": {
+     "reason_code": "out_of_corpus",
+     "competing_provisions": [],
+     "note": "Not an unauthorised electronic banking transaction covered by the corpus (e.g. a payment the customer made themselves). An analyst must handle it."
+    },
+    "verification": {
+     "passed": true,
+     "attempts": 1,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.22108294069766998,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.41337544098496437,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.17258431762456894,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "7(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.1165829598903656,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "6(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 1355.0364580005407,
+      "prompt_tokens": 2780,
+      "completion_tokens": 26,
+      "cost_usd": 0.0008990000000000001,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 54.98733418062329,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "customer protection un-authorised electronic banking transactions out of scope"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:2",
+        "rbi_circular_2017:11#1",
+        "rbi_circular_2017:4",
+        "sbi_policy_2021:customer-grievances-redressal-policy:4(iv)#1",
+        "rbi_circular_2017:5#2"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 8121.027375105768,
+      "prompt_tokens": 4085,
+      "completion_tokens": 153,
+      "cost_usd": 0.0016079999999999998,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": false,
+       "queries": [
+        "customer protection un-authorised electronic banking transactions out of scope"
+       ],
+       "strategy": null
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 14127.525125164539,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "pass",
+       "strategy_hint": null,
+       "unsupported_claims": [],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 0.11437525972723961,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.output",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "blocked": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "finalize",
+      "latency_ms": 0.16012461856007576,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": null,
+     "delay": true,
+     "outcome_correct": true
+    },
+    "groundedness": null,
+    "faithfulness": null,
+    "context_relevance": 0.5,
+    "hallucinated": false,
+    "n_claims": 0,
+    "n_retrieved": 8,
+    "unresolved_citations": [],
+    "judged": true,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 1,
+    "prompt_tokens": 1524,
+    "completion_tokens": 118,
+    "cost_usd": 0.0007522
+   }
+  },
+  "S16": {
+   "status": "done",
+   "scenario_hash": "7c2aaafb490bc383",
+   "result": {
+    "run_id": "eval-S16",
+    "status": "escalated",
+    "classification": null,
+    "reporting_delay_working_days": 1,
+    "route": null,
+    "basis": "",
+    "liability_position": "",
+    "citations": [],
+    "escalation": {
+     "reason_code": "out_of_corpus",
+     "competing_provisions": [],
+     "note": "Not an unauthorised electronic banking transaction covered by the corpus (e.g. a payment the customer made themselves). An analyst must handle it."
+    },
+    "verification": {
+     "passed": true,
+     "attempts": 1,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.2655410207808018,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.5142083391547203,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.19966717809438705,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "7(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.14975015074014664,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "6(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 5602.955250069499,
+      "prompt_tokens": 2784,
+      "completion_tokens": 23,
+      "cost_usd": 0.0008927,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 56.72895768657327,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "unauthorised electronic banking transactions electronic banking transactions"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:5#1",
+        "rbi_circular_2017:5#2",
+        "rbi_circular_2017:4",
+        "rbi_circular_2017:5#3",
+        "sbi_policy_2021:compensation-policy:4.6.5"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 2026.342041324824,
+      "prompt_tokens": 3965,
+      "completion_tokens": 140,
+      "cost_usd": 0.0015395,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": false,
+       "queries": [
+        "unauthorised electronic banking transactions electronic banking transactions"
+       ],
+       "strategy": null
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 12318.68995912373,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "pass",
+       "strategy_hint": null,
+       "unsupported_claims": [],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 0.1100422814488411,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.output",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "blocked": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "finalize",
+      "latency_ms": 0.16850000247359276,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": null,
+     "delay": true,
+     "outcome_correct": true
+    },
+    "groundedness": null,
+    "faithfulness": null,
+    "context_relevance": 1.0,
+    "hallucinated": false,
+    "n_claims": 0,
+    "n_retrieved": 8,
+    "unresolved_citations": [],
+    "judged": true,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 1,
+    "prompt_tokens": 1364,
+    "completion_tokens": 117,
+    "cost_usd": 0.0007017
+   }
+  },
+  "S17": {
+   "status": "done",
+   "scenario_hash": "bd86950fca34dd42",
+   "result": {
+    "run_id": "eval-S17",
+    "status": "escalated",
+    "classification": null,
+    "reporting_delay_working_days": 1,
+    "route": null,
+    "basis": "",
+    "liability_position": "",
+    "citations": [],
+    "escalation": {
+     "reason_code": "injection_detected",
+     "competing_provisions": [],
+     "note": "possible prompt injection in field(s): narrative; no model was called. An analyst should read the original request."
+    },
+    "verification": {
+     "passed": false,
+     "attempts": 0,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": [
+        "injection:narrative:ignore_instructions"
+       ]
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.2820417284965515,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "escalate",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "reason_code": "injection_detected"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": null,
+     "delay": true,
+     "no_model_call": true,
+     "outcome_correct": true
+    },
+    "groundedness": null,
+    "faithfulness": null,
+    "context_relevance": null,
+    "hallucinated": false,
+    "n_claims": 0,
+    "n_retrieved": 0,
+    "unresolved_citations": [],
+    "judged": false,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "cost_usd": 0
+   }
+  },
+  "S18": {
+   "status": "done",
+   "scenario_hash": "48213b8df7e88759",
+   "result": {
+    "run_id": "eval-S18",
+    "status": "escalated",
+    "classification": null,
+    "reporting_delay_working_days": 1,
+    "route": null,
+    "basis": "",
+    "liability_position": "",
+    "citations": [],
+    "escalation": {
+     "reason_code": "injection_detected",
+     "competing_provisions": [],
+     "note": "possible prompt injection in field(s): merchant; no model was called. An analyst should read the original request."
+    },
+    "verification": {
+     "passed": false,
+     "attempts": 0,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": [
+        "injection:merchant:fake_role_tag",
+        "injection:merchant:outcome_steering"
+       ]
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.23349979892373085,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "escalate",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "reason_code": "injection_detected"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": null,
+     "delay": true,
+     "no_model_call": true,
+     "outcome_correct": true
+    },
+    "groundedness": null,
+    "faithfulness": null,
+    "context_relevance": null,
+    "hallucinated": false,
+    "n_claims": 0,
+    "n_retrieved": 0,
+    "unresolved_citations": [],
+    "judged": false,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 0,
+    "prompt_tokens": 0,
+    "completion_tokens": 0,
+    "cost_usd": 0
+   }
+  },
+  "S19": {
+   "status": "done",
+   "scenario_hash": "3e9d31682b73dcf4",
+   "result": {
+    "run_id": "eval-S19",
+    "status": "recommended",
+    "classification": "duplicate",
+    "reporting_delay_working_days": 1,
+    "route": "chargeback",
+    "basis": "Complaints relating to Point of Sales / Card Not Present transactions are dealt with as per card network guidelines pursuant to SBI Customer Rights, Grievance Redressal and Compensation Policy 2021 para 5(i).",
+    "liability_position": "The complaint relating to the Card Not Present transaction will be dealt with, within the period prescribed, including pre-arbitration claims, as per the guidelines of Master Card / VISA / Europay / CUP and Ru-Pay.",
+    "citations": [
+     {
+      "clause_id": "5(i)",
+      "doc_id": "sbi_policy_2021",
+      "quote": "However, complaints relating to Point of Sales (POS) / Card Not Present (CNP) transactions, Master Card / VISA complaints will be dealt with, within the period prescribed, including pre-arbitration claims, as per the guidelines of Master Card / VISA / Europay / CUP and Ru-Pay."
+     }
+    ],
+    "escalation": null,
+    "verification": {
+     "passed": true,
+     "attempts": 1,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.13199960812926292,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.37062494084239006,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.11700019240379333,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "7(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.07862504571676254,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "6(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 6554.1570000350475,
+      "prompt_tokens": 2779,
+      "completion_tokens": 29,
+      "cost_usd": 0.0009061999999999999,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 58.009708765894175,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "complaints on Point of Sales or Card Not Present transactions card network guidelines"
+       },
+       "chunk_ids": [
+        "sbi_policy_2021:customer-rights-policy:5(i)~2",
+        "rbi_circular_2017:5#2",
+        "rbi_circular_2017:13",
+        "sbi_policy_2021:customer-grievances-redressal-policy:4(iii)",
+        "sbi_policy_2021:customer-grievances-redressal-policy:4(iv)#1"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 7330.589416902512,
+      "prompt_tokens": 4184,
+      "completion_tokens": 22,
+      "cost_usd": 0.0013101999999999999,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 57.411333080381155,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "duplicate charge card network guidelines SBI policy"
+       },
+       "chunk_ids": [
+        "sbi_policy_2021:customer-rights-policy:2(ix)",
+        "sbi_policy_2021:customer-grievances-redressal-policy:10#4",
+        "sbi_policy_2021:customer-rights-policy:2(vi)",
+        "rbi_circular_2017:11#1",
+        "rbi_circular_2017:11#2"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 10541.60545906052,
+      "prompt_tokens": 5360,
+      "completion_tokens": 38,
+      "cost_usd": 0.0017029999999999999,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.3548748791217804,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "sbi_policy_2021",
+        "clause_id": "5(i)"
+       },
+       "chunk_ids": [
+        "sbi_policy_2021:customer-rights-policy:5(i)",
+        "sbi_policy_2021:customer-rights-policy:5(i)~2",
+        "sbi_policy_2021:compensation-policy:5(g)"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 7950.571166817099,
+      "prompt_tokens": 6400,
+      "completion_tokens": 438,
+      "cost_usd": 0.003015,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": true,
+       "queries": [
+        "complaints on Point of Sales or Card Not Present transactions card network guidelines",
+        "duplicate charge card network guidelines SBI policy"
+       ],
+       "strategy": null
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 32664.09608302638,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "verification",
+      "latency_ms": 5463.089917320758,
+      "prompt_tokens": 1853,
+      "completion_tokens": 352,
+      "cost_usd": 0.0014359,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "pass",
+       "strategy_hint": null,
+       "unsupported_claims": [],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 5463.586957659572,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.output",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "blocked": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "finalize",
+      "latency_ms": 0.2266247756779194,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": 1.0,
+     "delay": true,
+     "outcome_correct": true
+    },
+    "groundedness": 1.0,
+    "faithfulness": 1.0,
+    "context_relevance": 0.15,
+    "hallucinated": false,
+    "n_claims": 2,
+    "n_retrieved": 15,
+    "unresolved_citations": [],
+    "judged": true,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 1,
+    "prompt_tokens": 2441,
+    "completion_tokens": 237,
+    "cost_usd": 0.0013248
+   }
+  },
+  "S20": {
+   "status": "done",
+   "scenario_hash": "f4145309966a4dc3",
+   "result": {
+    "run_id": "eval-S20",
+    "status": "recommended",
+    "classification": "merchant_dispute",
+    "reporting_delay_working_days": 2,
+    "route": "chargeback",
+    "basis": "SBI Customer Rights, Grievance Redressal and Compensation Policy specifies that complaints relating to Card Not Present transactions will be dealt with as per card network guidelines.",
+    "liability_position": "The complaint will be dealt with, within the period prescribed, including pre-arbitration claims, as per the guidelines of Master Card / VISA / Europay / CUP and Ru-Pay.",
+    "citations": [
+     {
+      "clause_id": "5(i)",
+      "doc_id": "sbi_policy_2021",
+      "quote": "However, complaints relating to Point of Sales (POS) / Card Not Present (CNP) transactions, Master Card / VISA complaints will be dealt with, within the period prescribed, including pre-arbitration claims, as per the guidelines of Master Card / VISA / Europay / CUP and Ru-Pay."
+     }
+    ],
+    "escalation": null,
+    "verification": {
+     "passed": true,
+     "attempts": 1,
+     "unsupported_claims": []
+    },
+    "prompt_version": "analysis_v1.4+verification_v1.1",
+    "trace": [
+     {
+      "type": "node",
+      "name": "run.config",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "seed_provisions": true,
+       "analysis_prompt": "analysis_v1",
+       "max_model_calls": 14,
+       "max_tool_calls": 16,
+       "wall_clock_s": 120.0
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.input",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "flags": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "guard_input",
+      "latency_ms": 0.1543750986456871,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.24791713804006577,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "Table 2"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:table-2"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.14166580513119698,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "7(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:7(i)"
+       ]
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.1182076521217823,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "doc_id": "rbi_circular_2017",
+        "clause_id": "6(i)"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:6"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 6242.605624720454,
+      "prompt_tokens": 2773,
+      "completion_tokens": 25,
+      "cost_usd": 0.0008944,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 72.88779085502028,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "card network guidelines Point of Sales Card Not Present"
+       },
+       "chunk_ids": [
+        "rbi_circular_2017:p8#2",
+        "rbi_circular_2017:p8#1",
+        "sbi_policy_2021:customer-rights-policy:5(i)~2",
+        "rbi_circular_2017:14",
+        "sbi_policy_2021:customer-rights-policy:3(i)"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 2817.18379072845,
+      "prompt_tokens": 4353,
+      "completion_tokens": 38,
+      "cost_usd": 0.0014008999999999998,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "get_clause",
+      "latency_ms": 0.2661673352122307,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "clause_id": "5(i)",
+        "doc_id": "sbi_policy_2021"
+       },
+       "chunk_ids": [
+        "sbi_policy_2021:customer-rights-policy:5(i)",
+        "sbi_policy_2021:customer-rights-policy:5(i)~2",
+        "sbi_policy_2021:compensation-policy:5(g)"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 3765.6828337348998,
+      "prompt_tokens": 5393,
+      "completion_tokens": 398,
+      "cost_usd": 0.0026128999999999996,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 3725.5740417167544,
+      "prompt_tokens": 6047,
+      "completion_tokens": 30,
+      "cost_usd": 0.0018890999999999997,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "tool",
+      "name": "search_corpus",
+      "latency_ms": 41.03920795023441,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "arguments": {
+        "query": "complaints relating to Point of Sales Card Not Present transactions master card visa guidelines"
+       },
+       "chunk_ids": [
+        "sbi_policy_2021:customer-rights-policy:5(i)~2",
+        "rbi_circular_2017:p8#1",
+        "sbi_policy_2021:compensation-policy:p42",
+        "rbi_circular_2017:13",
+        "rbi_circular_2017:p8#2"
+       ]
+      }
+     },
+     {
+      "type": "llm",
+      "name": "analysis",
+      "latency_ms": 5997.420792002231,
+      "prompt_tokens": 7711,
+      "completion_tokens": 398,
+      "cost_usd": 0.0033083,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis.modifier_check",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "done": true,
+       "queries": [
+        "card network guidelines Point of Sales Card Not Present",
+        "complaints relating to Point of Sales Card Not Present transactions master card visa guidelines"
+       ],
+       "strategy": null
+      }
+     },
+     {
+      "type": "node",
+      "name": "analysis_agent",
+      "latency_ms": 34051.785291172564,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "llm",
+      "name": "verification",
+      "latency_ms": 5943.866374902427,
+      "prompt_tokens": 1803,
+      "completion_tokens": 324,
+      "cost_usd": 0.0013509,
+      "detail": {
+       "provider": "primary"
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier.verdict",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "decision": "pass",
+       "strategy_hint": null,
+       "unsupported_claims": [],
+       "reason_code": null,
+       "note": ""
+      }
+     },
+     {
+      "type": "node",
+      "name": "verifier",
+      "latency_ms": 5945.575583260506,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     },
+     {
+      "type": "node",
+      "name": "guardrails.output",
+      "latency_ms": 0.0,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "blocked": []
+      }
+     },
+     {
+      "type": "node",
+      "name": "finalize",
+      "latency_ms": 0.08670846000313759,
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "cost_usd": 0.0,
+      "detail": {
+       "outcome": "ok"
+      }
+     }
+    ]
+   },
+   "metrics": {
+    "outcome": {
+     "status": true,
+     "route": true,
+     "classification": true,
+     "reason_code": true,
+     "citation_recall": 1.0,
+     "delay": true,
+     "outcome_correct": true
+    },
+    "groundedness": 1.0,
+    "faithfulness": 1.0,
+    "context_relevance": 0.3,
+    "hallucinated": false,
+    "n_claims": 2,
+    "n_retrieved": 12,
+    "unresolved_citations": [],
+    "judged": true,
+    "judge_cached": false
+   },
+   "judge_usage": {
+    "calls": 1,
+    "prompt_tokens": 2247,
+    "completion_tokens": 238,
+    "cost_usd": 0.0012691
+   }
+  }
+ },
+ "summary": {
+  "metrics": {
+   "confirmed": {
+    "n": 17,
+    "outcome_accuracy": 1.0,
+    "status_accuracy": 1.0,
+    "route_accuracy": 1.0,
+    "classification_accuracy": 1.0,
+    "reason_code_accuracy": 1.0,
+    "citation_recall": 0.8472222222222222,
+    "groundedness": 0.9285714285714286,
+    "n_groundedness": 7,
+    "faithfulness": 0.9285714285714286,
+    "context_relevance": 0.5585897435897436,
+    "n_context_relevance": 14,
+    "hallucination_rate": 0.058823529411764705,
+    "n_hallucination": 17
+   },
+   "needs_review": {
+    "n": 3,
+    "outcome_accuracy": 1.0,
+    "status_accuracy": 1.0,
+    "route_accuracy": 1.0,
+    "classification_accuracy": 1.0,
+    "reason_code_accuracy": 1.0,
+    "citation_recall": 1.0,
+    "groundedness": 0.7777777777777778,
+    "n_groundedness": 3,
+    "faithfulness": 0.7777777777777778,
+    "context_relevance": 0.33666666666666667,
+    "n_context_relevance": 3,
+    "hallucination_rate": 0.3333333333333333,
+    "n_hallucination": 3
+   },
+   "all": {
+    "n": 20,
+    "outcome_accuracy": 1.0,
+    "status_accuracy": 1.0,
+    "route_accuracy": 1.0,
+    "classification_accuracy": 1.0,
+    "reason_code_accuracy": 1.0,
+    "citation_recall": 0.8777777777777778,
+    "groundedness": 0.8833333333333334,
+    "n_groundedness": 10,
+    "faithfulness": 0.8833333333333334,
+    "context_relevance": 0.5194268476621418,
+    "n_context_relevance": 17,
+    "hallucination_rate": 0.1,
+    "n_hallucination": 20
+   },
+   "by_tag": {
+    "bank_deficiency": {
+     "n": 1,
+     "outcome_accuracy": 1.0,
+     "status_accuracy": 1.0,
+     "route_accuracy": 1.0,
+     "classification_accuracy": 1.0,
+     "reason_code_accuracy": 1.0,
+     "citation_recall": 1.0,
+     "groundedness": 1.0,
+     "n_groundedness": 1,
+     "faithfulness": 1.0,
+     "context_relevance": 0.45,
+     "n_context_relevance": 1,
+     "hallucination_rate": 0.0,
+     "n_hallucination": 1
+    },
+    "boundary": {
+     "n": 4,
+     "outcome_accuracy": 1.0,
+     "status_accuracy": 1.0,
+     "route_accuracy": 1.0,
+     "classification_accuracy": 1.0,
+     "reason_code_accuracy": 1.0,
+     "citation_recall": 0.6666666666666666,
+     "groundedness": 0.875,
+     "n_groundedness": 4,
+     "faithfulness": 0.875,
+     "context_relevance": 0.5150641025641025,
+     "n_context_relevance": 4,
+     "hallucination_rate": 0.25,
+     "n_hallucination": 4
+    },
+    "chargeback": {
+     "n": 2,
+     "outcome_accuracy": 1.0,
+     "status_accuracy": 1.0,
+     "route_accuracy": 1.0,
+     "classification_accuracy": 1.0,
+     "reason_code_accuracy": 1.0,
+     "citation_recall": 1.0,
+     "groundedness": 1.0,
+     "n_groundedness": 2,
+     "faithfulness": 1.0,
+     "context_relevance": 0.22499999999999998,
+     "n_context_relevance": 2,
+     "hallucination_rate": 0.0,
+     "n_hallucination": 2
+    },
+    "cnp": {
+     "n": 6,
+     "outcome_accuracy": 1.0,
+     "status_accuracy": 1.0,
+     "route_accuracy": 1.0,
+     "classification_accuracy": 1.0,
+     "reason_code_accuracy": 1.0,
+     "citation_recall": 0.7777777777777778,
+     "groundedness": 1.0,
+     "n_groundedness": 4,
+     "faithfulness": 1.0,
+     "context_relevance": 0.5183760683760684,
+     "n_context_relevance": 6,
+     "hallucination_rate": 0.0,
+     "n_hallucination": 6
+    },
+    "credit_card": {
+     "n": 1,
+     "outcome_accuracy": 1.0,
+     "status_accuracy": 1.0,
+     "route_accuracy": 1.0,
+     "classification_accuracy": 1.0,
+     "reason_code_accuracy": 1.0,
+     "citation_recall": 0.3333333333333333,
+     "groundedness": 1.0,
+     "n_groundedness": 1,
+     "faithfulness": 1.0,
+     "context_relevance": 0.41025641025641024,
+     "n_context_relevance": 1,
+     "hallucination_rate": 0.0,
+     "n_hallucination": 1
+    },
+    "customer_authorised": {
+     "n": 2,
+     "outcome_accuracy": 1.0,
+     "status_accuracy": 1.0,
+     "route_accuracy": 1.0,
+     "classification_accuracy": 1.0,
+     "reason_code_accuracy": 1.0,
+     "citation_recall": null,
+     "groundedness": null,
+     "n_groundedness": 0,
+     "faithfulness": null,
+     "context_relevance": 1.0,
+     "n_context_relevance": 1,
+     "hallucination_rate": 0.0,
+     "n_hallucination": 2
+    },
+    "duplicate": {
+     "n": 1,
+     "outcome_accuracy": 1.0,
+     "status_accuracy": 1.0,
+     "route_accuracy": 1.0,
+     "classification_accuracy": 1.0,
+     "reason_code_accuracy": 1.0,
+     "citation_recall": 1.0,
+     "groundedness": 1.0,
+     "n_groundedness": 1,
+     "faithfulness": 1.0,
+     "context_relevance": 0.15,
+     "n_context_relevance": 1,
+     "hallucination_rate": 0.0,
+     "n_hallucination": 1
+    },
+    "late_report": {
+     "n": 4,
+     "outcome_accuracy": 1.0,
+     "status_accuracy": 1.0,
+     "route_accuracy": 1.0,
+     "classification_accuracy": 1.0,
+     "reason_code_accuracy": 1.0,
+     "citation_recall": 0.875,
+     "groundedness": 0.8333333333333334,
+     "n_groundedness": 4,
+     "faithfulness": 0.8333333333333334,
+     "context_relevance": 0.5425,
+     "n_context_relevance": 4,
+     "hallucination_rate": 0.25,
+     "n_hallucination": 4
+    },
+    "limited_liability": {
+     "n": 2,
+     "outcome_accuracy": 1.0,
+     "status_accuracy": 1.0,
+     "route_accuracy": 1.0,
+     "classification_accuracy": 1.0,
+     "reason_code_accuracy": 1.0,
+     "citation_recall": 0.3333333333333333,
+     "groundedness": 1.0,
+     "n_groundedness": 2,
+     "faithfulness": 1.0,
+     "context_relevance": 0.30512820512820515,
+     "n_context_relevance": 2,
+     "hallucination_rate": 0.0,
+     "n_hallucination": 2
+    },
+    "merchant_dispute": {
+     "n": 1,
+     "outcome_accuracy": 1.0,
+     "status_accuracy": 1.0,
+     "route_accuracy": 1.0,
+     "classification_accuracy": 1.0,
+     "reason_code_accuracy": 1.0,
+     "citation_recall": 1.0,
+     "groundedness": 1.0,
+     "n_groundedness": 1,
+     "faithfulness": 1.0,
+     "context_relevance": 0.3,
+     "n_context_relevance": 1,
+     "hallucination_rate": 0.0,
+     "n_hallucination": 1
+    },
+    "negligence": {
+     "n": 5,
+     "outcome_accuracy": 1.0,
+     "status_accuracy": 1.0,
+     "route_accuracy": 1.0,
+     "classification_accuracy": 1.0,
+     "reason_code_accuracy": 1.0,
+     "citation_recall": 1.0,
+     "groundedness": null,
+     "n_groundedness": 0,
+     "faithfulness": null,
+     "context_relevance": 0.53,
+     "n_context_relevance": 5,
+     "hallucination_rate": 0.0,
+     "n_hallucination": 5
+    },
+    "no_alert_date": {
+     "n": 1,
+     "outcome_accuracy": 1.0,
+     "status_accuracy": 1.0,
+     "route_accuracy": 1.0,
+     "classification_accuracy": 1.0,
+     "reason_code_accuracy": 1.0,
+     "citation_recall": 1.0,
+     "groundedness": 0.3333333333333333,
+     "n_groundedness": 1,
+     "faithfulness": 0.3333333333333333,
+     "context_relevance": 0.56,
+     "n_context_relevance": 1,
+     "hallucination_rate": 1.0,
+     "n_hallucination": 1
+    },
+    "out_of_corpus": {
+     "n": 3,
+     "outcome_accuracy": 1.0,
+     "status_accuracy": 1.0,
+     "route_accuracy": 1.0,
+     "classification_accuracy": 1.0,
+     "reason_code_accuracy": 1.0,
+     "citation_recall": null,
+     "groundedness": null,
+     "n_groundedness": 0,
+     "faithfulness": null,
+     "context_relevance": 0.75,
+     "n_context_relevance": 2,
+     "hallucination_rate": 0.0,
+     "n_hallucination": 3
+    },
+    "prompt_injection": {
+     "n": 2,
+     "outcome_accuracy": 1.0,
+     "status_accuracy": 1.0,
+     "route_accuracy": 1.0,
+     "classification_accuracy": 1.0,
+     "reason_code_accuracy": 1.0,
+     "citation_recall": null,
+     "groundedness": null,
+     "n_groundedness": 0,
+     "faithfulness": null,
+     "context_relevance": null,
+     "n_context_relevance": 0,
+     "hallucination_rate": 0.0,
+     "n_hallucination": 2
+    },
+    "section_4_1": {
+     "n": 3,
+     "outcome_accuracy": 1.0,
+     "status_accuracy": 1.0,
+     "route_accuracy": 1.0,
+     "classification_accuracy": 1.0,
+     "reason_code_accuracy": 1.0,
+     "citation_recall": 0.8333333333333334,
+     "groundedness": 1.0,
+     "n_groundedness": 1,
+     "faithfulness": 1.0,
+     "context_relevance": 0.5533333333333333,
+     "n_context_relevance": 3,
+     "hallucination_rate": 0.0,
+     "n_hallucination": 3
+    },
+    "skimming": {
+     "n": 2,
+     "outcome_accuracy": 1.0,
+     "status_accuracy": 1.0,
+     "route_accuracy": 1.0,
+     "classification_accuracy": 1.0,
+     "reason_code_accuracy": 1.0,
+     "citation_recall": 1.0,
+     "groundedness": 0.41666666666666663,
+     "n_groundedness": 2,
+     "faithfulness": 0.41666666666666663,
+     "context_relevance": 0.655,
+     "n_context_relevance": 2,
+     "hallucination_rate": 1.0,
+     "n_hallucination": 2
+    },
+    "upi": {
+     "n": 1,
+     "outcome_accuracy": 1.0,
+     "status_accuracy": 1.0,
+     "route_accuracy": 1.0,
+     "classification_accuracy": 1.0,
+     "reason_code_accuracy": 1.0,
+     "citation_recall": 1.0,
+     "groundedness": null,
+     "n_groundedness": 0,
+     "faithfulness": null,
+     "context_relevance": 0.35,
+     "n_context_relevance": 1,
+     "hallucination_rate": 0.0,
+     "n_hallucination": 1
+    },
+    "variant": {
+     "n": 2,
+     "outcome_accuracy": 1.0,
+     "status_accuracy": 1.0,
+     "route_accuracy": 1.0,
+     "classification_accuracy": 1.0,
+     "reason_code_accuracy": 1.0,
+     "citation_recall": 0.75,
+     "groundedness": 1.0,
+     "n_groundedness": 1,
+     "faithfulness": 1.0,
+     "context_relevance": 0.455,
+     "n_context_relevance": 2,
+     "hallucination_rate": 0.0,
+     "n_hallucination": 2
+    },
+    "zero_liability": {
+     "n": 3,
+     "outcome_accuracy": 1.0,
+     "status_accuracy": 1.0,
+     "route_accuracy": 1.0,
+     "classification_accuracy": 1.0,
+     "reason_code_accuracy": 1.0,
+     "citation_recall": 1.0,
+     "groundedness": 0.8333333333333334,
+     "n_groundedness": 3,
+     "faithfulness": 0.8333333333333334,
+     "context_relevance": 0.6333333333333333,
+     "n_context_relevance": 3,
+     "hallucination_rate": 0.3333333333333333,
+     "n_hallucination": 3
+    }
+   }
+  },
+  "cost": {
+   "runs": 20,
+   "per_step": {
+    "analysis": {
+     "calls": 75,
+     "prompt_tokens": 361568,
+     "completion_tokens": 14742,
+     "cost_usd": 0.1453254
+    },
+    "verification": {
+     "calls": 16,
+     "prompt_tokens": 24787,
+     "completion_tokens": 4973,
+     "cost_usd": 0.0198686
+    }
+   },
+   "mean_cost_per_run_usd": 0.008259699999999998,
+   "mean_tokens_per_run": 20303.5,
+   "mean_model_calls_per_run": 4.55,
+   "cost_per_100_runs_usd": 0.8259699999999999,
+   "tokens_per_100_runs": 2030350.0,
+   "largest_cost_driver": "analysis",
+   "driver_basis": "cost_usd",
+   "judge": {
+    "calls": 17,
+    "prompt_tokens": 36250,
+    "completion_tokens": 5555,
+    "cost_usd": 0.0247625
+   }
+  },
+  "prompt_versions_seen": [
+   "analysis_v1.4+verification_v1.1"
+  ],
+  "seed_provisions_seen": [
+   "True"
+  ],
+  "done": 20,
+  "pending": [],
+  "timeouts": []
+ }
+}

@@ -1,0 +1,3 @@
+# judge cache (re-creatable; results/ ARE kept: they are report evidence)
+.cache/
+*.tmp
