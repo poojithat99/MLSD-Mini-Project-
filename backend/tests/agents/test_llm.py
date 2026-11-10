@@ -113,3 +113,27 @@ def test_config_comes_only_from_environment(monkeypatch):
         build_client()
     monkeypatch.setenv("LLM_COST_PER_1K_PROMPT", "0.25")
     assert LLMConfig.from_env().cost_per_1k_prompt == 0.25
+
+
+def test_hard_timeout_on_a_provider_that_never_returns():
+    """A provider call that hangs (e.g. a response trickling in) is abandoned after the hard timeout."""
+    import time as _time
+    from backend.agents import llm as llm_mod
+
+    class Hanging:
+        name = "hanging"
+        def complete(self, messages, tools, timeout_s):
+            _time.sleep(5)
+            return LLMResponse(content="too late")
+
+    old = llm_mod.HARD_TIMEOUT_MARGIN_S
+    llm_mod.HARD_TIMEOUT_MARGIN_S = 0.0
+    try:
+        client = LLMClient(Hanging(), make_config(timeout_s=0.2, max_attempts=1, breaker_threshold=10),
+                           sleep=lambda s: None)
+        start = _time.perf_counter()
+        with pytest.raises(ProviderUnavailable, match="hard timeout"):
+            client.call("analysis", [{"role": "user", "content": "x"}])
+        assert _time.perf_counter() - start < 2
+    finally:
+        llm_mod.HARD_TIMEOUT_MARGIN_S = old

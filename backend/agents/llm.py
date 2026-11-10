@@ -20,6 +20,7 @@ it, so they never make a real API call.
 """
 from __future__ import annotations
 
+import contextvars
 import email.utils
 import json
 import os
@@ -27,6 +28,8 @@ import random
 import re
 import threading
 import time
+from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import TimeoutError as FutureTimeout
 from dataclasses import dataclass, field
 from typing import Callable, Protocol
 
@@ -387,6 +390,21 @@ class FakeLLM:
 # --------------------------------------------------------------------------- #
 # the client the agents use
 # --------------------------------------------------------------------------- #
+# Hard timeout.  The SDK's timeout is per network operation, so a response that keeps trickling in can
+# outlive it.  Every provider call therefore also runs under future.result(timeout=...): a backstop a
+# few seconds after the SDK's own limit.  Python cannot kill the thread; we stop waiting and move on.
+HARD_TIMEOUT_MARGIN_S = 5.0
+_llm_pool = ThreadPoolExecutor(max_workers=8, thread_name_prefix="llm-call")
+
+
+def _with_hard_timeout(fn: Callable[[], LLMResponse], seconds: float) -> LLMResponse:
+    future = _llm_pool.submit(contextvars.copy_context().run, fn)   # keep run_id / correlation_id in logs
+    try:
+        return future.result(timeout=seconds)
+    except FutureTimeout as exc:
+        raise TransientError(f"no response within {seconds:.0f} s (hard timeout)") from exc
+
+
 class LLMClient:
     def __init__(
         self, primary: Provider, config: LLMConfig, fallback: Provider | None = None,
@@ -463,7 +481,8 @@ class LLMClient:
             self._pace()
             start = time.perf_counter()
             try:
-                resp = provider.complete(messages, tools, timeout)
+                resp = _with_hard_timeout(lambda: provider.complete(messages, tools, timeout),
+                                          timeout + HARD_TIMEOUT_MARGIN_S)
             except TransientError as exc:
                 last, retry_after = str(exc), exc.retry_after
                 if breaker is not None:
